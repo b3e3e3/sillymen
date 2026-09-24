@@ -1,0 +1,317 @@
+[gd_scene load_steps=17 format=3 uid="uid://dbtop60oxh2nm"]
+
+[ext_resource type="Script" uid="uid://bwa8csqpft8qu" path="res://battle/battle.gd" id="1_7sfm4"]
+[ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/greenman2.png" id="2_i431l"]
+[ext_resource type="Script" uid="uid://be7kiwchmrywi" path="res://battle/move.gd" id="3_0npn6"]
+[ext_resource type="AnimationLibrary" uid="uid://c8t28iwyrm5pj" path="res://battle/moves.res" id="4_0npn6"]
+[ext_resource type="Theme" uid="uid://wndbxhjqlhr" path="res://battle/battleboxtheme.tres" id="4_i431l"]
+[ext_resource type="Script" uid="uid://do1lycjnfyrog" path="res://battle/ai_battler.gd" id="4_lcjiy"]
+[ext_resource type="Texture2D" uid="uid://drslfgo3vq7iw" path="res://battle/greenman1.png" id="4_mhv3b"]
+[ext_resource type="PackedScene" uid="uid://dw63vc6x88m23" path="res://battle/battler.tscn" id="5_mhv3b"]
+[ext_resource type="Script" uid="uid://b2qgnt1xqiro2" path="res://battle/battle_box.gd" id="6_dw4jg"]
+
+[sub_resource type="Resource" id="Resource_mhv3b"]
+script = ExtResource("3_0npn6")
+animation = &"funnyblast"
+display_name = "Funny Blast"
+metadata/_custom_type_script = "uid://be7kiwchmrywi"
+
+[sub_resource type="Resource" id="Resource_0npn6"]
+script = ExtResource("3_0npn6")
+animation = &"assmove"
+display_name = "Ass Move"
+metadata/_custom_type_script = "uid://be7kiwchmrywi"
+
+[sub_resource type="Animation" id="Animation_b1i6x"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer:speed_scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0009999999),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"switch_primary_sprite"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sl0w2"]
+_data = {
+&"RESET": SubResource("Animation_b1i6x")
+}
+
+[sub_resource type="Animation" id="Animation_0npn6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main/OpponentContainer/Green Man:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Main/PlayerContainer/Purple Man:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.001),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_dw4jg"]
+resource_name = "intro"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Main/PlayerContainer/Purple Man:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-700, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Main/OpponentContainer/Green Man:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(700, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mhv3b"]
+_data = {
+&"RESET": SubResource("Animation_0npn6"),
+&"intro": SubResource("Animation_dw4jg")
+}
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7sfm4")
+
+[node name="Main" type="Control" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.83950615
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerContainer" type="Control" parent="Main"]
+anchors_preset = 0
+offset_left = 309.0
+offset_top = 339.0
+offset_right = 349.0
+offset_bottom = 379.0
+
+[node name="Purple Man" parent="Main/PlayerContainer" instance=ExtResource("5_mhv3b")]
+layout_mode = 1
+moves = Array[ExtResource("3_0npn6")]([SubResource("Resource_mhv3b"), SubResource("Resource_0npn6")])
+
+[node name="OpponentContainer" type="Control" parent="Main"]
+anchors_preset = 0
+offset_left = 820.0
+offset_top = 172.0
+offset_right = 860.0
+offset_bottom = 212.0
+
+[node name="Green Man" type="Control" parent="Main/OpponentContainer"]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 40.000008
+offset_bottom = 40.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("4_lcjiy")
+primary_sprite = ExtResource("2_i431l")
+secondary_sprite = ExtResource("4_mhv3b")
+moves = Array[ExtResource("3_0npn6")]([SubResource("Resource_0npn6")])
+
+[node name="Sprite" type="TextureRect" parent="Main/OpponentContainer/Green Man"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -306.0
+offset_top = -204.0
+offset_right = 306.0
+offset_bottom = 204.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_i431l")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Main/OpponentContainer/Green Man"]
+libraries = {
+&"": SubResource("AnimationLibrary_sl0w2"),
+&"moves": ExtResource("4_0npn6")
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_mhv3b")
+}
+
+[node name="BattleBox" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.7484568
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme = ExtResource("4_i431l")
+script = ExtResource("6_dw4jg")
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleBox"]
+layout_mode = 2
+
+[node name="MovesPanel" type="Panel" parent="BattleBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleBox/HBoxContainer/MovesPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GridContainer" type="GridContainer" parent="BattleBox/HBoxContainer/MovesPanel/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+columns = 2
+
+[node name="MoveButton" type="Button" parent="BattleBox/HBoxContainer/MovesPanel/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Fuck"
+
+[node name="DialogContainer" type="MarginContainer" parent="BattleBox/HBoxContainer"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Dialog" type="RichTextLabel" parent="BattleBox/HBoxContainer/DialogContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "What happens now?"
+
+[node name="ChoicePanel" type="Panel" parent="BattleBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BattleBox/HBoxContainer/ChoicePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GridContainer" type="GridContainer" parent="BattleBox/HBoxContainer/ChoicePanel/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+columns = 2
+
+[node name="AttackButton" type="Button" parent="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Attack"
+
+[node name="ThinkButton" type="Button" parent="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Think"
+
+[node name="TryButton" type="Button" parent="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Try"
+
+[node name="CowerButton" type="Button" parent="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cower"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="animation_started" from="AnimationPlayer" to="." method="_on_animation_player_animation_started"]
+[connection signal="pressed" from="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer/ThinkButton" to="." method="_on_think_button_pressed"]
+[connection signal="pressed" from="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer/TryButton" to="." method="_on_try_button_pressed"]
+[connection signal="pressed" from="BattleBox/HBoxContainer/ChoicePanel/MarginContainer/GridContainer/CowerButton" to="." method="_on_cower_button_pressed"]
