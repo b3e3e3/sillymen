@@ -1,7 +1,7 @@
 extends Resource
 class_name Battler
 
-signal turn_started
+signal turn_taken
 
 @export_category("General")
 @export var name: String
@@ -16,7 +16,10 @@ signal turn_started
 var current_move: Move = null
 
 
-func take_turn(state: BattleState) -> void:
-	#current_move = moves.pick_random()
-	turn_started.emit()
+#func take_turn(state: BattleState) -> void:
+	##current_move = moves.pick_random()
+	#turn_taken.emit()
+	#current_move.do(self)
+	
+func resolve_move() -> void:
 	current_move.do(self)

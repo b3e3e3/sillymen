@@ -29,7 +29,7 @@ func process_state() -> void:
 			turn_started.emit(active_battler)
 			_next_phase = Phase.MOVE
 		Phase.MOVE:
-			active_battler.take_turn(self)
+			#active_battler.take_turn(self)
 			_next_phase = Phase.POST
 			
 		Phase.POST:

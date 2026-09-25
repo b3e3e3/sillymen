@@ -1,9 +1,17 @@
 extends Node
 class_name BattlerController
 
-@export var battler: Battler
-var simulator: BattleSimulator = get_parent() # HACK
+signal turn_taken
 
+@export var battler: Battler
+@onready var simulator: BattleSimulator = get_parent() # HACK
+
+
+func _ready() -> void:
+	battler.turn_taken.connect(turn_taken.emit)
+	
+func _exit_tree() -> void:
+	battler.turn_taken.disconnect(turn_taken.emit)
 
 func set_current_move(move: Move):
 	battler.current_move = move
