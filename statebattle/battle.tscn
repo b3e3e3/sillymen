@@ -1,0 +1,146 @@
+[gd_scene load_steps=18 format=3 uid="uid://die5koqu8kq0q"]
+
+[ext_resource type="Script" uid="uid://l4tdn5b04jks" path="res://statebattle/battle_simulator.gd" id="1_4dkhb"]
+[ext_resource type="Script" uid="uid://u6dj3ippnaog" path="res://statebattle/battle_state.gd" id="2_f4huc"]
+[ext_resource type="Script" uid="uid://dhlfd6toycgxx" path="res://statebattle/battler.gd" id="2_khold"]
+[ext_resource type="Script" uid="uid://bgkl88cjh18f6" path="res://statebattle/move.gd" id="3_3e3lt"]
+[ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/purpleman1.png" id="3_bxywf"]
+[ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/purpleman2.png" id="4_3e3lt"]
+[ext_resource type="Script" uid="uid://cjbsv2yrt2727" path="res://statebattle/player_controller.gd" id="4_j5u3w"]
+[ext_resource type="Resource" uid="uid://003vgvdiuqot" path="res://statebattle/moves/funnyblast.tres" id="4_qpcvk"]
+[ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/greenman2.png" id="5_fnwgy"]
+[ext_resource type="Resource" uid="uid://d35tmc7sqcnhf" path="res://statebattle/moves/assmove.tres" id="5_y7tyw"]
+[ext_resource type="Texture2D" uid="uid://drslfgo3vq7iw" path="res://battle/greenman1.png" id="6_qpcvk"]
+[ext_resource type="Script" uid="uid://coum8josggix4" path="res://statebattle/battler_controller.gd" id="11_y7tyw"]
+[ext_resource type="Theme" uid="uid://wndbxhjqlhr" path="res://battle/battleboxtheme.tres" id="12_wtxou"]
+[ext_resource type="Script" uid="uid://bny132epygry0" path="res://statebattle/battle_box.gd" id="13_8j1rm"]
+
+[sub_resource type="Resource" id="Resource_hq2s5"]
+script = ExtResource("2_f4huc")
+metadata/_custom_type_script = "uid://u6dj3ippnaog"
+
+[sub_resource type="Resource" id="Resource_y7tyw"]
+script = ExtResource("2_khold")
+name = "Purple Man"
+primary_sprite = ExtResource("3_bxywf")
+secondary_sprite = ExtResource("4_3e3lt")
+moves = Array[ExtResource("3_3e3lt")]([ExtResource("4_qpcvk"), ExtResource("5_y7tyw")])
+metadata/_custom_type_script = "uid://dhlfd6toycgxx"
+
+[sub_resource type="Resource" id="Resource_wtxou"]
+script = ExtResource("2_khold")
+name = "Green Man"
+primary_sprite = ExtResource("5_fnwgy")
+secondary_sprite = ExtResource("6_qpcvk")
+moves = Array[ExtResource("3_3e3lt")]([ExtResource("4_qpcvk"), ExtResource("5_y7tyw")])
+metadata/_custom_type_script = "uid://dhlfd6toycgxx"
+
+[node name="Battle" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("player", "battle_box")]
+script = ExtResource("1_4dkhb")
+battle = SubResource("Resource_hq2s5")
+player = NodePath("PlayerController")
+battle_box = NodePath("../BattleBox")
+
+[node name="PlayerController" type="Node" parent="BattleSimulator"]
+script = ExtResource("4_j5u3w")
+battler = SubResource("Resource_y7tyw")
+metadata/_custom_type_script = "uid://cjbsv2yrt2727"
+
+[node name="BattlerController" type="Node" parent="BattleSimulator"]
+script = ExtResource("11_y7tyw")
+battler = SubResource("Resource_wtxou")
+metadata/_custom_type_script = "uid://coum8josggix4"
+
+[node name="BattleBox" type="MarginContainer" parent="." node_paths=PackedStringArray("simulator", "dialog_container", "dialog_label", "choice_container", "moves_container")]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.6419753
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("12_wtxou")
+script = ExtResource("13_8j1rm")
+simulator = NodePath("../BattleSimulator")
+dialog_container = NodePath("Panel/HBoxContainer/DialogContainer")
+dialog_label = NodePath("Panel/HBoxContainer/DialogContainer/DialogLabel")
+choice_container = NodePath("Panel/HBoxContainer/ChoiceContainer")
+moves_container = NodePath("Panel/HBoxContainer/MovesContainer")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="BattleBox"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattleBox/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DialogContainer" type="MarginContainer" parent="BattleBox/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DialogLabel" type="RichTextLabel" parent="BattleBox/Panel/HBoxContainer/DialogContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AHHHHHHHH"
+
+[node name="ChoiceContainer" type="GridContainer" parent="BattleBox/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="AttackButton" type="Button" parent="BattleBox/Panel/HBoxContainer/ChoiceContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Attack"
+
+[node name="ThinkButton" type="Button" parent="BattleBox/Panel/HBoxContainer/ChoiceContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Think"
+
+[node name="TryButton" type="Button" parent="BattleBox/Panel/HBoxContainer/ChoiceContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Try"
+
+[node name="CowerButton" type="Button" parent="BattleBox/Panel/HBoxContainer/ChoiceContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Cower"
+
+[node name="MovesContainer" type="GridContainer" parent="BattleBox/Panel/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2
+
+[node name="OpponentContainer" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="OpponentContainer"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[connection signal="move_selected" from="BattleBox" to="BattleSimulator" method="_on_move_selected"]
+[connection signal="pressed" from="BattleBox/Panel/HBoxContainer/ChoiceContainer/AttackButton" to="BattleSimulator" method="_on_attack_button_pressed"]
+[connection signal="pressed" from="BattleBox/Panel/HBoxContainer/ChoiceContainer/AttackButton" to="BattleBox" method="_on_attack_button_pressed"]

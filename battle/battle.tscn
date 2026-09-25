@@ -1,14 +1,14 @@
 [gd_scene load_steps=17 format=3 uid="uid://dbtop60oxh2nm"]
 
-[ext_resource type="Script" uid="uid://bwa8csqpft8qu" path="res://battle/battle.gd" id="1_7sfm4"]
+[ext_resource type="Script" path="res://battle/battle.gd" id="1_7sfm4"]
 [ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/greenman2.png" id="2_i431l"]
-[ext_resource type="Script" uid="uid://be7kiwchmrywi" path="res://battle/move.gd" id="3_0npn6"]
+[ext_resource type="Script" path="res://battle/move.gd" id="3_0npn6"]
 [ext_resource type="AnimationLibrary" uid="uid://c8t28iwyrm5pj" path="res://battle/moves.res" id="4_0npn6"]
 [ext_resource type="Theme" uid="uid://wndbxhjqlhr" path="res://battle/battleboxtheme.tres" id="4_i431l"]
-[ext_resource type="Script" uid="uid://do1lycjnfyrog" path="res://battle/ai_battler.gd" id="4_lcjiy"]
+[ext_resource type="Script" path="res://battle/ai_battler.gd" id="4_lcjiy"]
 [ext_resource type="Texture2D" uid="uid://drslfgo3vq7iw" path="res://battle/greenman1.png" id="4_mhv3b"]
 [ext_resource type="PackedScene" uid="uid://dw63vc6x88m23" path="res://battle/battler.tscn" id="5_mhv3b"]
-[ext_resource type="Script" uid="uid://b2qgnt1xqiro2" path="res://battle/battle_box.gd" id="6_dw4jg"]
+[ext_resource type="Script" path="res://battle/battle_box.gd" id="6_dw4jg"]
 
 [sub_resource type="Resource" id="Resource_mhv3b"]
 script = ExtResource("3_0npn6")

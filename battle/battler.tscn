@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dw63vc6x88m23"]
 
-[ext_resource type="Script" uid="uid://dckhb4rweyo2n" path="res://battle/battler.gd" id="1_e008c"]
+[ext_resource type="Script" path="res://battle/battler.gd" id="1_e008c"]
 [ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/purpleman1.png" id="2_8njye"]
 [ext_resource type="AnimationLibrary" uid="uid://c8t28iwyrm5pj" path="res://battle/moves.res" id="3_8njye"]
 [ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/purpleman2.png" id="3_66ygq"]

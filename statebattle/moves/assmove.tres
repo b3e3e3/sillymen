@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Move" load_steps=2 format=3 uid="uid://d35tmc7sqcnhf"]
+
+[ext_resource type="Script" uid="uid://bgkl88cjh18f6" path="res://statebattle/move.gd" id="1_np65w"]
+
+[resource]
+script = ExtResource("1_np65w")
+name = "Ass Move"
+animation_name = &"assmove"
+metadata/_custom_type_script = "uid://bgkl88cjh18f6"
