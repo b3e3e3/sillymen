@@ -1,5 +1,6 @@
 extends BattlerController
 class_name PlayerController
 
-func _on_turn_started() -> void:
-	pass
+
+func choose_move(_state: BattleState) -> Move:
+	return await simulator.battle_box.move_selected # HACK -- is parent simulator?

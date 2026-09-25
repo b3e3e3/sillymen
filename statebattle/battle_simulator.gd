@@ -27,47 +27,39 @@ func _ready() -> void:
 	battle.turn_completed.connect(func():
 		turn_count += 1
 	)
-
-func simulate() -> void:
-	# simulation
+	
+	run_simulation()
+	
+func log_current_state() -> void:
 	var prev_state := battle.duplicate(true)
 	previous_states.append(prev_state)
-
-	battle.process_state()
-	battle_box.update(battle)
-
-	var message := battle_box.get_message(battle)
-	if message != "":
-		print(turn_count + 1, '. ', message)
-		#await get_tree().create_timer(1).timeout
-
-func step() -> void:
-	if is_simulating: return
-	is_simulating = true
-	simulate()
-	if should_wait():
-		await get_tree().create_timer(1).timeout
-	is_simulating = false
-
-func is_player_choice() -> bool:
-	return is_player_turn() and battle.phase == BattleState.Phase.CHOICE
-
-func should_simulate() -> bool:
-	return not is_player_turn() or not is_player_choice()
 	
-func should_wait() -> bool:
-	return battle.phase == BattleState.Phase.MOVE
+func get_controller_for(battler: Battler) -> BattlerController:
+	var idx := controllers.find_custom(func(c):
+		return c.battler == battler
+	)
+	return controllers[idx]
 
-func _process(_delta: float) -> void:
-	if is_simulating: return
-	if should_simulate():
-		step()
-	
+func run_simulation() -> void:
+	# simulation
+	while true:	
+		log_current_state()
+		
+		battle.process_state()
+		battle_box.update(battle)
 
-func _on_attack_button_pressed() -> void:
-	pass
-
-func _on_move_selected(move: Move) -> void:
-	if not is_player_turn(): return
-	player.set_current_move(move)
-	step()
+		var message := battle_box.get_message(battle)
+		if message != "":
+			print(turn_count + 1, '. ', message)
+			
+		match battle.phase:
+			BattleState.Phase.CHOICE:
+				var controller := get_controller_for(battle.active_battler)
+				@warning_ignore("redundant_await")
+				controller.set_current_move(await controller.choose_move(battle))
+				
+			BattleState.Phase.MOVE:
+				await get_tree().create_timer(1).timeout
+			
+			BattleState.Phase.POST:
+				pass
