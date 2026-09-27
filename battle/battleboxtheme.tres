@@ -1,9 +1,0 @@
-[gd_resource type="Theme" format=3 uid="uid://wndbxhjqlhr"]
-
-[resource]
-Button/font_sizes/font_size = 24
-MarginContainer/constants/margin_bottom = 16
-MarginContainer/constants/margin_left = 16
-MarginContainer/constants/margin_right = 16
-MarginContainer/constants/margin_top = 16
-RichTextLabel/font_sizes/normal_font_size = 32
