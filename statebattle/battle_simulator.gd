@@ -53,7 +53,7 @@ func get_sprite_for(battler: Battler) -> BattlerSprite:
 
 func run_simulation() -> void:
 	# simulation
-	while true:	
+	while true:
 		log_current_state()
 		
 		battle.process_state()
@@ -69,10 +69,24 @@ func run_simulation() -> void:
 				@warning_ignore("redundant_await")
 				controller.set_current_move(await controller.choose_move(battle))
 				
-			BattleState.Phase.MOVE:
-				var sprite := get_sprite_for(battle.active_battler)
-				await sprite.play_animation(battle.active_battler.current_move)
-				battle.active_battler.resolve_move()
+			BattleState.Phase.MOVE:				
+				await get_sprite_for(battle.active_battler)					\
+						.play_animation(battle.active_battler.current_move	\
+						.get_animation())
+				
+				# HACK
+				var valid_targets := 								\
+						battle.active_battler.current_move			\
+						.get_valid_targets(battle.active_battler,	\
+						battle.battlers)
+				var target: Battler = valid_targets.front()
+				
+				var result := battle.active_battler.resolve_move(target)
+				if result.has_animation():
+					await get_sprite_for(target)	\
+							.play_animation(result	\
+							.get_animation())
+				
 				battle_box.update(battle)
 			
 			BattleState.Phase.POST:

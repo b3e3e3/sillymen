@@ -21,5 +21,5 @@ var current_move: Move = null
 	#turn_taken.emit()
 	#current_move.do(self)
 	
-func resolve_move() -> void:
-	current_move.do(self)
+func resolve_move(target: Battler) -> MoveResult:
+	return current_move.get_result(self, target)
