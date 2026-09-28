@@ -1,0 +1,101 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci5ba5t2a0o3h"]
+
+[ext_resource type="Theme" uid="uid://6j5ou4yhwnro" path="res://battle/ui/hpbox.theme" id="1_uvqsc"]
+[ext_resource type="Script" uid="uid://d0qk1r73hdfs4" path="res://battle/ui/hp_box.gd" id="2_7fk5q"]
+
+[node name="HPBoxContainer" type="PanelContainer"]
+anchors_preset = -1
+anchor_right = 0.28125
+anchor_bottom = 0.13117284
+grow_vertical = 2
+theme = ExtResource("1_uvqsc")
+script = ExtResource("2_7fk5q")
+metadata/_edit_group_ = true
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TitleBar" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/TitleBar"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="LevelLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TitleBar"]
+clip_contents = false
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "Lv."
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="LevelNumberLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TitleBar"]
+unique_name_in_owner = true
+clip_contents = false
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "???"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="NameLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TitleBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"BigLabel"
+text = "NAME"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
+[node name="HPLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "HP"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="HPBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+value = 1.0
+allow_greater = true
+show_percentage = false
+
+[node name="HPNumberLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/HBoxContainer/HPBar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"SmallLabel"
+text = "??/??"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1

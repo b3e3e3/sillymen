@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Battler" load_steps=7 format=3 uid="uid://dw6yfa0vl8spt"]
+
+[ext_resource type="Script" uid="uid://bgkl88cjh18f6" path="res://battle/move/move.gd" id="1_s67p4"]
+[ext_resource type="Resource" uid="uid://003vgvdiuqot" path="res://battle/move/moves/funnyblast.tres" id="2_f4d0h"]
+[ext_resource type="Resource" uid="uid://d35tmc7sqcnhf" path="res://battle/move/moves/assmove.tres" id="3_x0fgc"]
+[ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/battler/battlers/textures/greenman2.png" id="4_fe3ch"]
+[ext_resource type="Script" uid="uid://dhlfd6toycgxx" path="res://battle/battler/battler.gd" id="5_a8fy7"]
+[ext_resource type="Texture2D" uid="uid://drslfgo3vq7iw" path="res://battle/battler/battlers/textures/greenman1.png" id="6_d3jkf"]
+
+[resource]
+script = ExtResource("5_a8fy7")
+name = "Green Man"
+primary_sprite = ExtResource("4_fe3ch")
+secondary_sprite = ExtResource("6_d3jkf")
+moves = Array[ExtResource("1_s67p4")]([ExtResource("2_f4d0h"), ExtResource("3_x0fgc")])
+metadata/_custom_type_script = "uid://dhlfd6toycgxx"

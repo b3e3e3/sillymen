@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="MoveResult" load_steps=2 format=3 uid="uid://cd1wltmqve5vb"]
+
+[ext_resource type="Script" uid="uid://chdiii32u1cvk" path="res://battle/move/move_result.gd" id="1_urf5y"]
+
+[resource]
+script = ExtResource("1_urf5y")
+_animation_name = &"status/damage"
+metadata/_custom_type_script = "uid://chdiii32u1cvk"

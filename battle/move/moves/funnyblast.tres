@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Move" load_steps=3 format=3 uid="uid://003vgvdiuqot"]
+
+[ext_resource type="Script" uid="uid://bgkl88cjh18f6" path="res://battle/move/move.gd" id="1_kfnw4"]
+[ext_resource type="Resource" uid="uid://dxsudu8g7ks05" path="res://battle/move/move_results/boost.tres" id="1_km47y"]
+
+[resource]
+script = ExtResource("1_kfnw4")
+name = "Funny Blast"
+_animation_name = &"funnyblast"
+result = ExtResource("1_km47y")
+valid_targets = "Self"
+metadata/_custom_type_script = "uid://bgkl88cjh18f6"
