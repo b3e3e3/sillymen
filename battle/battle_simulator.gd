@@ -88,8 +88,13 @@ func _resolve_move(controller: BattlerController) -> Array[PlannedAction]:
 	return actions
 
 func _present_action(action: PlannedAction) -> void:
+	var landed := true
+	var msg := ""
+	
 	for i in action.result.get_repeat_count():
-		if not action.result.apply(action.user, action.target): break
+		if not action.result.apply(action.user, action.target):
+			landed = false
+			break
 	
 		_refresh_hpboxes()
 	
@@ -97,7 +102,11 @@ func _present_action(action: PlannedAction) -> void:
 			await get_sprite_for(action.target.battler)	\
 					.play_animation(action.result.get_animation())
 				
-	var msg := action.result.get_result_message()
+	if landed:
+		msg = action.result.get_result_message()
+	else:
+		msg = "But it missed!"
+	
 	if msg != "":
 		battle_box.show_message(msg)
 		await get_tree().create_timer(MSG_TIME).timeout
@@ -125,7 +134,7 @@ func run_simulation() -> void:
 				var controller := get_controller_for(battle.active_battler)
 				await get_sprite_for(battle.active_battler)					\
 						.play_animation(controller.current_move				\
-						.get_animation())
+						.get_animation()) # TODO: missed move
 				
 				for action in _resolve_move(controller):
 					await _present_action(action)
