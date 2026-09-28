@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cd1wltmqve5vb"]
+[gd_resource type="Resource" script_class="AttackMoveResult" load_steps=2 format=3 uid="uid://cd1wltmqve5vb"]
 
 [ext_resource type="Script" uid="uid://dv8e26se7fpvx" path="res://battle/move/attack_result.gd" id="1_x8bxu"]
 

@@ -4,7 +4,8 @@ class_name Move
 @export var name: String = "Move"
 @export var _animation_name: StringName
 @export var results: Array[MoveResult]
-@export var target_resolver := TargetResolver.new()
+
+var target_resolver := TargetResolver.new()
 
 
 func get_animation() -> StringName:

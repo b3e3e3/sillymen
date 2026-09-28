@@ -15,7 +15,7 @@ signal move_selected(move: Move)
 @export var choice_container: Control
 @export var moves_container: Control
 
-var message: String = "No state!"
+var message: String = ""
 var screen := Screen.NORMAL
 
 
@@ -31,6 +31,10 @@ func build_move_choices(battler: Battler) -> void:
 		button.pressed.connect(_on_move_button_pressed.bind(move), ConnectFlags.CONNECT_ONE_SHOT)
 		moves_container.add_child.call_deferred(button)
 
+func show_message(text: String) -> void:
+	message = text
+	update(simulator.battle)
+
 func get_message(state: BattleState) -> String:
 	match state.phase:
 		BattleState.Phase.CHOICE:
@@ -45,15 +49,8 @@ func get_message(state: BattleState) -> String:
 		#BattleState.Phase.POST:
 	return ""
 
-func update(state: BattleState) -> void:
-	if simulator.animation_player.is_playing() and simulator.animation_player.current_animation == &"intro": # HACK
-		dialog_container.visible = true
-		choice_container.visible = false
-		moves_container.visible = false
-		dialog_label.text = "%s appeared!" % state.battlers[1].name
-		return
-	
-	dialog_label.text = get_message(state)
+func update(state: BattleState) -> void:	
+	dialog_label.text = message#get_message(state)
 	match state.phase:
 		BattleState.Phase.CHOICE:
 			match screen:
@@ -74,6 +71,10 @@ func update(state: BattleState) -> void:
 			moves_container.visible = false
 		BattleState.Phase.POST:
 			dialog_container.visible = false
+			choice_container.visible = false
+			moves_container.visible = false
+		_:
+			dialog_container.visible = true
 			choice_container.visible = false
 			moves_container.visible = false
 

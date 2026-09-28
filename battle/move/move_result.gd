@@ -17,6 +17,15 @@ func get_animation() -> StringName:
 
 func get_valid_targets(resolver: TargetResolver, user: Battler, battlers: Array[Battler]) -> Array[Battler]:
 	return resolver.resolve(target_type, user, battlers)
+	
+func get_result_message() -> String:
+	return ""
+	
+func get_repeat_count() -> int:
+	return 1
+
+func reset() -> void:
+	affected_targets.clear()
 
 func can_apply() -> bool:
 	return randf() <= chance

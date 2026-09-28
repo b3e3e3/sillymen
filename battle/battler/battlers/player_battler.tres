@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Battler" load_steps=14 format=3 uid="uid://bngds8wlb6f1l"]
+[gd_resource type="Resource" script_class="Battler" load_steps=13 format=3 uid="uid://bngds8wlb6f1l"]
 
 [ext_resource type="Script" uid="uid://bgkl88cjh18f6" path="res://battle/move/move.gd" id="1_orhjr"]
 [ext_resource type="Resource" uid="uid://003vgvdiuqot" path="res://battle/move/moves/funnyblast.tres" id="2_wrd01"]
@@ -6,22 +6,20 @@
 [ext_resource type="Script" uid="uid://chdiii32u1cvk" path="res://battle/move/move_result.gd" id="4_qbeoq"]
 [ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/battler/battlers/textures/purpleman1.png" id="4_y2toi"]
 [ext_resource type="Script" uid="uid://dhlfd6toycgxx" path="res://battle/battler/battler.gd" id="5_dqlhm"]
+[ext_resource type="Script" uid="uid://dv8e26se7fpvx" path="res://battle/move/attack_result.gd" id="5_pbicj"]
 [ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/battler/battlers/textures/purpleman2.png" id="6_ler4l"]
-[ext_resource type="Resource" uid="uid://cd1wltmqve5vb" path="res://battle/move/move_results/damage.tres" id="6_p1hyd"]
-[ext_resource type="Script" uid="uid://dv8e26se7fpvx" path="res://battle/move/attack_result.gd" id="6_qbeoq"]
 [ext_resource type="Script" uid="uid://bxgekd8sqsc0l" path="res://battle/move/buff_result.gd" id="7_no6dl"]
 
-[sub_resource type="Resource" id="Resource_no6dl"]
-script = ExtResource("6_qbeoq")
-damage = 80
+[sub_resource type="Resource" id="Resource_qbeoq"]
+script = ExtResource("5_pbicj")
+damage = 20
+max_hits = 3
 _animation_name = &"damage"
-chance = 0.1
 metadata/_custom_type_script = "uid://dv8e26se7fpvx"
 
-[sub_resource type="Resource" id="Resource_p1hyd"]
+[sub_resource type="Resource" id="Resource_no6dl"]
 script = ExtResource("7_no6dl")
 amount = 10
-_animation_name = &"boost"
 target_type = 0
 metadata/_custom_type_script = "uid://bxgekd8sqsc0l"
 
@@ -29,7 +27,7 @@ metadata/_custom_type_script = "uid://bxgekd8sqsc0l"
 script = ExtResource("1_orhjr")
 name = "Insane Moment"
 _animation_name = &"assmove"
-results = Array[ExtResource("4_qbeoq")]([ExtResource("6_p1hyd"), SubResource("Resource_no6dl"), SubResource("Resource_p1hyd")])
+results = Array[ExtResource("4_qbeoq")]([SubResource("Resource_qbeoq"), SubResource("Resource_no6dl")])
 metadata/_custom_type_script = "uid://bgkl88cjh18f6"
 
 [resource]

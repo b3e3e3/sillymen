@@ -1,9 +1,8 @@
 extends Node
 class_name BattleSimulator
 
-signal move_finished
-
 const MAX_STATES := 100
+const MSG_TIME := 1.0
 
 # TODO: decouple UI
 @export var animation_player: AnimationPlayer
@@ -45,11 +44,17 @@ func _ready() -> void:
 	
 	# HACK
 	animation_player.play(&"intro")
-	battle_box.update(battle)
+	#battle_box.update(battle)
+	battle_box.show_message("%s appeared!" % battle.battlers[1].name)
 	await animation_player.animation_finished
 	animation_player.play(&"RESET")
 	
 	run_simulation()
+	
+func update_battle_box() -> void:
+	var message := battle_box.get_message(battle)
+	if message != "":
+		battle_box.show_message(message)
 	
 func log_current_state() -> void:
 	var prev_state := battle.duplicate(true)
@@ -68,34 +73,38 @@ func get_hpbox_for(controller: BattlerController) -> HPBox:
 	return _hpbox_by_controller[controller]
 	
 # battle_simulator.gd
-func _resolve_move(controller: BattlerController) -> Array[BattleResolution]:
-	var resolutions: Array[BattleResolution] = []
+func _resolve_move(controller: BattlerController) -> Array[PlannedAction]:
+	var actions: Array[PlannedAction] = []
 	for result in controller.current_move.get_results():
+		result.reset()
+		
 		var valid_targets := result.get_valid_targets(
 			controller.current_move.target_resolver,
 			controller.battler,
 			battle.battlers
 		)
+		
 		if valid_targets.is_empty(): continue
-
 		var target_controller := get_controller_for(valid_targets.front())
-		var applied := result.apply(controller, target_controller)
-		resolutions.append(BattleResolution.new(result, target_controller, applied))
-	return resolutions
+		actions.append(PlannedAction.new(result, controller, target_controller))
+		
+	return actions
 
-func _present_resolution(resolution: BattleResolution) -> void:
-	if not resolution.applied: return
+func _present_action(action: PlannedAction) -> void:
+	for i in action.result.get_repeat_count():
+		if not action.result.apply(action.user, action.target): break
 	
-	#var msg := outcome.result.get_result_message()
-	#if msg != "": print(msg)
+		for c in controllers:
+			get_hpbox_for(c).update()
 	
-	battle_box.update(battle)
-	for c in controllers:
-		get_hpbox_for(c).update()
-	
-	if resolution.result.has_animation():
-		await get_sprite_for(resolution.target.battler)	\
-				.play_animation(resolution.result.get_animation())
+		if action.result.has_animation():
+			await get_sprite_for(action.target.battler)	\
+					.play_animation(action.result.get_animation())
+				
+	var msg := action.result.get_result_message()
+	if msg != "":
+		battle_box.show_message(msg)
+		await get_tree().create_timer(MSG_TIME).timeout
 
 func run_simulation() -> void:
 	# simulation	
@@ -108,6 +117,7 @@ func run_simulation() -> void:
 		var message := battle_box.get_message(battle)
 		if message != "":
 			print(turn_count + 1, '. ', message)
+			battle_box.show_message(message)
 			
 		match battle.phase:
 			BattleState.Phase.CHOICE:
@@ -121,8 +131,8 @@ func run_simulation() -> void:
 						.play_animation(controller.current_move				\
 						.get_animation())
 				
-				for resolution in _resolve_move(controller):
-					await _present_resolution(resolution)
+				for action in _resolve_move(controller):
+					await _present_action(action)
 			
 			BattleState.Phase.POST:
 				pass
