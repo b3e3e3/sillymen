@@ -5,19 +5,11 @@ class_name AttackMoveResult
 @export var min_hits: int = 1
 @export var max_hits: int = 1
 
-var _rolled_hits := -1
 var _landed_hits := 0
 
 
 func get_repeat_count() -> int:
-	if _rolled_hits == -1:
-		_rolled_hits = randi_range(min_hits, max_hits)
-	return _rolled_hits
-	
-func reset() -> void:
-	super()
-	_rolled_hits = -1
-	_landed_hits = 0
+	return randi_range(min_hits, max_hits)
 
 func apply(_controller: BattlerController, target: BattlerController) -> bool:
 	if not can_apply(): return false

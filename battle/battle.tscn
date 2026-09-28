@@ -9,8 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/battler/battlers/textures/greenman2.png" id="5_fnwgy"]
 [ext_resource type="Resource" uid="uid://bngds8wlb6f1l" path="res://battle/battler/battlers/player_battler.tres" id="5_qpcvk"]
 [ext_resource type="Texture2D" uid="uid://drslfgo3vq7iw" path="res://battle/battler/battlers/textures/greenman1.png" id="6_qpcvk"]
+[ext_resource type="Script" uid="uid://coum8josggix4" path="res://battle/battler/battler_controller.gd" id="7_tkkqt"]
 [ext_resource type="Resource" uid="uid://dw6yfa0vl8spt" path="res://battle/battler/battlers/opp_battler.tres" id="7_y7tyw"]
-[ext_resource type="Script" uid="uid://coum8josggix4" path="res://battle/battler/battler_controller.gd" id="11_y7tyw"]
 [ext_resource type="Theme" uid="uid://b6uu72pmk28gc" path="res://battle/ui/battlebox.theme" id="12_wtxou"]
 [ext_resource type="Script" uid="uid://bny132epygry0" path="res://battle/ui/battle_box.gd" id="13_8j1rm"]
 [ext_resource type="PackedScene" uid="uid://bn351hwwdw8my" path="res://battle/battler/battler.tscn" id="13_on6y3"]
@@ -256,7 +256,7 @@ battler = ExtResource("5_qpcvk")
 metadata/_custom_type_script = "uid://cjbsv2yrt2727"
 
 [node name="BattlerController" type="Node" parent="BattleSimulator"]
-script = ExtResource("11_y7tyw")
+script = ExtResource("7_tkkqt")
 battler = ExtResource("7_y7tyw")
 metadata/_custom_type_script = "uid://coum8josggix4"
 

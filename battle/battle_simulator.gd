@@ -33,7 +33,6 @@ func _ready() -> void:
 		_hpbox_by_controller[b.controller] = b
 	for c in controllers:
 		_controller_by_battler[c.battler] = c
-		
 		# register battlers
 		battle.battlers.append(c.battler)
 		print("Registered battler %s" % c.battler.name)
@@ -42,9 +41,7 @@ func _ready() -> void:
 		turn_count += 1
 	)
 	
-	# HACK
 	animation_player.play(&"intro")
-	#battle_box.update(battle)
 	battle_box.show_message("%s appeared!" % battle.battlers[1].name)
 	await animation_player.animation_finished
 	animation_player.play(&"RESET")
@@ -72,14 +69,14 @@ func get_sprite_for(battler: Battler) -> BattlerSprite:
 func get_hpbox_for(controller: BattlerController) -> HPBox:
 	return _hpbox_by_controller[controller]
 	
-# battle_simulator.gd
+func _refresh_hpboxes() -> void:
+	for c in controllers:
+		get_hpbox_for(c).update()
+
 func _resolve_move(controller: BattlerController) -> Array[PlannedAction]:
 	var actions: Array[PlannedAction] = []
-	for result in controller.current_move.get_results():
-		result.reset()
-		
+	for result in controller.current_move.get_results():		
 		var valid_targets := result.get_valid_targets(
-			controller.current_move.target_resolver,
 			controller.battler,
 			battle.battlers
 		)
@@ -94,8 +91,7 @@ func _present_action(action: PlannedAction) -> void:
 	for i in action.result.get_repeat_count():
 		if not action.result.apply(action.user, action.target): break
 	
-		for c in controllers:
-			get_hpbox_for(c).update()
+		_refresh_hpboxes()
 	
 		if action.result.has_animation():
 			await get_sprite_for(action.target.battler)	\
