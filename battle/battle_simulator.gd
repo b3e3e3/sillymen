@@ -18,7 +18,6 @@ var previous_states: Array[BattleState] = []
 var turn_count: int = 0
 
 
-
 func is_player_turn() -> bool:
 	return battle.active_battler == player.battler
 
@@ -103,6 +102,7 @@ func run_simulation() -> void:
 				
 				var result := controller.resolve_move(get_controller_for(target))
 				
+				# HACK -- get_hp_box_for might be slow, dictionary maybe?
 				for c in controllers:
 					get_hp_box_for(c).update()
 					
