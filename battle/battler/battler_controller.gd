@@ -4,7 +4,12 @@ class_name BattlerController
 @export var battler: Battler
 
 var current_move: Move = null
-var current_hp: int
+var _current_hp: int
+var current_hp: int:
+	get:
+		return _current_hp
+	set(val):
+		_current_hp = (clamp(val, 0, battler.max_hp))
 
 @onready var simulator: BattleSimulator = get_parent() # HACK
 
@@ -12,12 +17,12 @@ var current_hp: int
 func _ready() -> void:
 	current_hp = battler.max_hp
 	
-func resolve_move(target: BattlerController) -> Array[MoveResult]:
-	var _results: Array[MoveResult] = []
-	for r in current_move.results:
-		if r.apply(self, target):
-			_results.append(r)
-	return _results
+#func resolve_move(target: BattlerController) -> Array[MoveResult]:
+	#var _results: Array[MoveResult] = []
+	#for r in current_move.results:
+		#if r.apply(self, target):
+			#_results.append(r)
+	#return _results
 
 func set_current_move(move: Move):
 	current_move = move
