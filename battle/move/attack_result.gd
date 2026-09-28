@@ -22,6 +22,6 @@ func apply(_controller: BattlerController, target: BattlerController) -> bool:
 	return true
 
 func get_result_message() -> String:
-	if _landed_hits > 1:
+	if max_hits > 1:
 		return "Hit %d time(s)!" % [_landed_hits]
 	return ""
