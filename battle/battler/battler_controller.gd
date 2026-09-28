@@ -12,9 +12,12 @@ var current_hp: int
 func _ready() -> void:
 	current_hp = battler.max_hp
 	
-func resolve_move(target: BattlerController) -> MoveResult:
-	current_move.result.apply(self, target)
-	return current_move.result
+func resolve_move(target: BattlerController) -> Array[MoveResult]:
+	var _results: Array[MoveResult] = []
+	for r in current_move.results:
+		if r.apply(self, target):
+			_results.append(r)
+	return _results
 
 func set_current_move(move: Move):
 	current_move = move

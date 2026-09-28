@@ -1,16 +1,32 @@
-[gd_resource type="Resource" script_class="Battler" load_steps=7 format=3 uid="uid://bngds8wlb6f1l"]
+[gd_resource type="Resource" script_class="Battler" load_steps=11 format=3 uid="uid://bngds8wlb6f1l"]
 
 [ext_resource type="Script" uid="uid://bgkl88cjh18f6" path="res://battle/move/move.gd" id="1_orhjr"]
 [ext_resource type="Resource" uid="uid://003vgvdiuqot" path="res://battle/move/moves/funnyblast.tres" id="2_wrd01"]
 [ext_resource type="Resource" uid="uid://d35tmc7sqcnhf" path="res://battle/move/moves/assmove.tres" id="3_28e3e"]
+[ext_resource type="Script" uid="uid://chdiii32u1cvk" path="res://battle/move/move_result.gd" id="4_qbeoq"]
 [ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/battler/battlers/textures/purpleman1.png" id="4_y2toi"]
 [ext_resource type="Script" uid="uid://dhlfd6toycgxx" path="res://battle/battler/battler.gd" id="5_dqlhm"]
 [ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/battler/battlers/textures/purpleman2.png" id="6_ler4l"]
+[ext_resource type="Resource" uid="uid://cd1wltmqve5vb" path="res://battle/move/move_results/damage.tres" id="6_p1hyd"]
+
+[sub_resource type="Resource" id="Resource_qbeoq"]
+script = ExtResource("4_qbeoq")
+_animation_name = &"status/damage"
+debug_damage = 80
+chance = 0.1
+metadata/_custom_type_script = "uid://chdiii32u1cvk"
+
+[sub_resource type="Resource" id="Resource_s2wqd"]
+script = ExtResource("1_orhjr")
+name = "Insane Moment"
+_animation_name = &"assmove"
+results = Array[ExtResource("4_qbeoq")]([ExtResource("6_p1hyd"), SubResource("Resource_qbeoq")])
+metadata/_custom_type_script = "uid://bgkl88cjh18f6"
 
 [resource]
 script = ExtResource("5_dqlhm")
 name = "Purple Man"
 primary_sprite = ExtResource("4_y2toi")
 secondary_sprite = ExtResource("6_ler4l")
-moves = Array[ExtResource("1_orhjr")]([ExtResource("2_wrd01"), ExtResource("3_28e3e")])
+moves = Array[ExtResource("1_orhjr")]([ExtResource("2_wrd01"), ExtResource("3_28e3e"), SubResource("Resource_s2wqd")])
 metadata/_custom_type_script = "uid://dhlfd6toycgxx"

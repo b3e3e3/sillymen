@@ -100,16 +100,17 @@ func run_simulation() -> void:
 						battle.battlers)
 				var target: Battler = valid_targets.front()
 				
-				var result := controller.resolve_move(get_controller_for(target))
+				var results := controller.resolve_move(get_controller_for(target))
 				
 				# HACK -- get_hp_box_for might be slow, dictionary maybe?
 				for c in controllers:
 					get_hp_box_for(c).update()
 					
-				if result.has_animation():
-					await get_sprite_for(target)	\
-							.play_animation(result	\
-							.get_animation())
+				for result in results:
+					if result.has_animation():
+						await get_sprite_for(target)	\
+								.play_animation(result	\
+								.get_animation())
 				
 				battle_box.update(battle)
 			
