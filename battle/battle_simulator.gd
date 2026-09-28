@@ -4,15 +4,19 @@ class_name BattleSimulator
 const MAX_STATES := 100
 const MSG_TIME := 1.0
 
-# TODO: decouple UI
-@export var animation_player: AnimationPlayer
+@export_category("Components")
+@export var controllers: Array[BattlerController]
 @export var battle: BattleState
-@export var player: BattlerController
+
+# TODO: decouple UI
+@export_category("UI")
+@export var animation_player: AnimationPlayer
 @export var battle_box: BattleBox
 @export var hp_boxes: Array[HPBox]
 @export var sprites: Array[BattlerSprite]
-@export var controllers: Array[BattlerController]
 
+
+var player: BattlerController
 var previous_states: Array[BattleState] = []
 var turn_count: int = 0
 
@@ -33,6 +37,9 @@ func _ready() -> void:
 		_hpbox_by_controller[b.controller] = b
 	for c in controllers:
 		_controller_by_battler[c.battler] = c
+		if c is PlayerController or c == controllers[0]:
+			player = c
+			print("Assumed player controller as %s" % [c.name])
 		# register battlers
 		battle.battlers.append(c.battler)
 		print("Registered battler %s" % c.battler.name)
@@ -41,14 +48,18 @@ func _ready() -> void:
 		turn_count += 1
 	)
 	
-	animation_player.play(&"intro")
-	battle_box.show_message("%s appeared!" % battle.battlers[1].name)
-	await animation_player.animation_finished
-	animation_player.play(&"RESET")
+	if battle_box:
+		battle_box.show_message("%s appeared!" % battle.battlers[1].name)
+	
+	if animation_player:
+		animation_player.play(&"intro")
+		await animation_player.animation_finished
+		animation_player.play(&"RESET")
 	
 	run_simulation()
 	
 func update_battle_box() -> void:
+	if not battle_box: return
 	var message := battle_box.get_message(battle)
 	if message != "":
 		battle_box.show_message(message)
@@ -107,37 +118,40 @@ func _present_action(action: PlannedAction) -> void:
 	else:
 		msg = "But it missed!"
 	
-	if msg != "":
+	if battle_box and msg != "":
 		battle_box.show_message(msg)
 		await get_tree().create_timer(MSG_TIME).timeout
 
-func run_simulation() -> void:
-	# simulation	
-	while true:
-		log_current_state()
-		
-		battle.process_state()
+func step() -> void:
+	log_current_state()
+	
+	battle.process_state()
+	if battle_box:
 		battle_box.update(battle)
 
 		var message := battle_box.get_message(battle)
 		if message != "":
 			print(turn_count + 1, '. ', message)
 			battle_box.show_message(message)
+		
+	match battle.phase:
+		BattleState.Phase.CHOICE:
+			var controller := get_controller_for(battle.active_battler)
+			@warning_ignore("redundant_await")
+			controller.set_current_move(await controller.choose_move(battle))
 			
-		match battle.phase:
-			BattleState.Phase.CHOICE:
-				var controller := get_controller_for(battle.active_battler)
-				@warning_ignore("redundant_await")
-				controller.set_current_move(await controller.choose_move(battle))
-				
-			BattleState.Phase.MOVE:
-				var controller := get_controller_for(battle.active_battler)
-				await get_sprite_for(battle.active_battler)					\
-						.play_animation(controller.current_move				\
-						.get_animation()) # TODO: missed move
-				
-				for action in _resolve_move(controller):
-					await _present_action(action)
+		BattleState.Phase.MOVE:
+			var controller := get_controller_for(battle.active_battler)
+			await get_sprite_for(battle.active_battler)					\
+					.play_animation(controller.current_move				\
+					.get_animation()) # TODO: missed move
 			
-			BattleState.Phase.POST:
-				pass
+			for action in _resolve_move(controller):
+				await _present_action(action)
+		
+		BattleState.Phase.POST:
+			pass
+
+func run_simulation() -> void:
+	while true:
+		await step()
