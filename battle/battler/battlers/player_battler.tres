@@ -22,7 +22,7 @@ metadata/_custom_type_script = "uid://dv8e26se7fpvx"
 script = ExtResource("7_no6dl")
 amount = 10
 _animation_name = &"boost"
-valid_targets = "Self"
+target_type = 0
 metadata/_custom_type_script = "uid://bxgekd8sqsc0l"
 
 [sub_resource type="Resource" id="Resource_s2wqd"]

@@ -66,6 +66,36 @@ func get_sprite_for(battler: Battler) -> BattlerSprite:
 	
 func get_hpbox_for(controller: BattlerController) -> HPBox:
 	return _hpbox_by_controller[controller]
+	
+# battle_simulator.gd
+func _resolve_move(controller: BattlerController) -> Array[BattleResolution]:
+	var resolutions: Array[BattleResolution] = []
+	for result in controller.current_move.get_results():
+		var valid_targets := result.get_valid_targets(
+			controller.current_move.target_resolver,
+			controller.battler,
+			battle.battlers
+		)
+		if valid_targets.is_empty(): continue
+
+		var target_controller := get_controller_for(valid_targets.front())
+		var applied := result.apply(controller, target_controller)
+		resolutions.append(BattleResolution.new(result, target_controller, applied))
+	return resolutions
+
+func _present_resolution(resolution: BattleResolution) -> void:
+	if not resolution.applied: return
+	
+	#var msg := outcome.result.get_result_message()
+	#if msg != "": print(msg)
+	
+	battle_box.update(battle)
+	for c in controllers:
+		get_hpbox_for(c).update()
+	
+	if resolution.result.has_animation():
+		await get_sprite_for(resolution.target.battler)	\
+				.play_animation(resolution.result.get_animation())
 
 func run_simulation() -> void:
 	# simulation	
@@ -91,36 +121,8 @@ func run_simulation() -> void:
 						.play_animation(controller.current_move				\
 						.get_animation())
 				
-				## HACK
-				#var valid_targets := 								\
-						#controller.current_move						\
-						#.get_valid_targets(battle.active_battler,	\
-						#battle.battlers)
-				#var target: Battler = valid_targets.front()
-				
-				#var results := controller.resolve_move(get_controller_for(target))
-				var results := controller.current_move.get_results()
-					
-				for result in results:
-					# HACK
-					var valid_targets := 													\
-							result															\
-							.get_valid_targets(controller.current_move.target_resolver, 	\
-								battle.active_battler,										\
-							battle.battlers)
-					var target: Battler = valid_targets.front()
-					if not result.apply(controller, get_controller_for(target)): continue
-					
-					battle_box.update(battle)
-					
-					for c in controllers:
-						get_hpbox_for(c).update()
-					
-					if result.has_animation():
-						await get_sprite_for(target)	\
-								.play_animation(result	\
-								.get_animation())
-				
+				for resolution in _resolve_move(controller):
+					await _present_resolution(resolution)
 			
 			BattleState.Phase.POST:
 				pass

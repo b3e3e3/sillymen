@@ -9,5 +9,4 @@ script = ExtResource("1_kfnw4")
 name = "Funny Blast"
 _animation_name = &"funnyblast"
 results = Array[ExtResource("2_mgpcu")]([ExtResource("1_km47y")])
-valid_targets = "Self"
 metadata/_custom_type_script = "uid://bgkl88cjh18f6"

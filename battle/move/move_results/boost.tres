@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://dxsudu8g7ks05"]
+[gd_resource type="Resource" script_class="BuffMoveResult" load_steps=2 format=3 uid="uid://dxsudu8g7ks05"]
 
 [ext_resource type="Script" uid="uid://bxgekd8sqsc0l" path="res://battle/move/buff_result.gd" id="1_wi87b"]
 
@@ -6,4 +6,5 @@
 script = ExtResource("1_wi87b")
 amount = 10
 _animation_name = &"status/boost"
+target_type = 0
 metadata/_custom_type_script = "uid://chdiii32u1cvk"

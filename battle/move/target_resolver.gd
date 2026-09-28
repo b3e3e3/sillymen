@@ -1,13 +1,16 @@
 extends Resource
 class_name TargetResolver
 
+enum TargetType {
+	SELF,
+	OTHER,
+}
 
-func get_self_targets(user: Battler, battlers: Array[Battler]) -> Array[Battler]:
-	return battlers.filter(func(b):
-		return user == b
-	)
-	
-func get_other_targets(user: Battler, battlers: Array[Battler]) -> Array[Battler]:
-	return battlers.filter(func(b):
-		return user != b
-	)
+
+func resolve(target_type: TargetType, user: Battler, battlers: Array[Battler]) -> Array[Battler]:
+	match target_type:
+		TargetType.SELF:
+			return battlers.filter(func(b): return user == b)
+		TargetType.OTHER:
+			return battlers.filter(func(b): return user != b)
+	return []

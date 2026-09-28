@@ -8,6 +8,5 @@
 script = ExtResource("1_np65w")
 name = "Ass Move"
 _animation_name = &"assmove"
-result = ExtResource("1_ldmia")
 results = Array[ExtResource("2_ldhqn")]([ExtResource("1_ldmia")])
 metadata/_custom_type_script = "uid://bgkl88cjh18f6"
