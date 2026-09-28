@@ -17,17 +17,27 @@ const MAX_STATES := 100
 var previous_states: Array[BattleState] = []
 var turn_count: int = 0
 
+var _controller_by_battler: Dictionary = {}
+var _sprite_by_battler: Dictionary = {}
+var _hpbox_by_controller: Dictionary = {}
+
 
 func is_player_turn() -> bool:
 	return battle.active_battler == player.battler
 
 func _ready() -> void:
 	assert(player in controllers, "Player must be one of controllers")
-		
-	# register battlers
+	
+	for s in sprites:
+		_sprite_by_battler[s.battler] = s
+	for b in hp_boxes:
+		_hpbox_by_controller[b.controller] = b
 	for c in controllers:
+		_controller_by_battler[c.battler] = c
+		
+		# register battlers
 		battle.battlers.append(c.battler)
-		print("Registered %s" % c.battler.name)
+		print("Registered battler %s" % c.battler.name)
 		
 	battle.turn_completed.connect(func():
 		turn_count += 1
@@ -49,25 +59,13 @@ func log_current_state() -> void:
 		previous_states.pop_front()
 	
 func get_controller_for(battler: Battler) -> BattlerController:
-	var idx := controllers.find_custom(func(c):
-		return c.battler == battler
-	)
-	assert(idx != -1, "No BattlerController found for %s" % [battler.name])
-	return controllers[idx]
+	return _controller_by_battler[battler]
 	
 func get_sprite_for(battler: Battler) -> BattlerSprite:
-	var idx := sprites.find_custom(func(s):
-		return s.battler == battler
-	)
-	assert(idx != -1, "No BattlerSprite found for %s" % [battler.name])
-	return sprites[idx]
+	return _sprite_by_battler[battler]
 	
-func get_hp_box_for(controller: BattlerController) -> HPBox:
-	var idx := hp_boxes.find_custom(func(b):
-		return b.controller == controller
-	)
-	assert(idx != -1, "No HPBox found for %s" % [controller.name])
-	return hp_boxes[idx]
+func get_hpbox_for(controller: BattlerController) -> HPBox:
+	return _hpbox_by_controller[controller]
 
 func run_simulation() -> void:
 	# simulation	
@@ -93,23 +91,30 @@ func run_simulation() -> void:
 						.play_animation(controller.current_move				\
 						.get_animation())
 				
-				# HACK
-				var valid_targets := 								\
-						controller.current_move						\
-						.get_valid_targets(battle.active_battler,	\
-						battle.battlers)
-				var target: Battler = valid_targets.front()
+				## HACK
+				#var valid_targets := 								\
+						#controller.current_move						\
+						#.get_valid_targets(battle.active_battler,	\
+						#battle.battlers)
+				#var target: Battler = valid_targets.front()
 				
 				#var results := controller.resolve_move(get_controller_for(target))
 				var results := controller.current_move.get_results()
 					
 				for result in results:
+					# HACK
+					var valid_targets := 													\
+							result															\
+							.get_valid_targets(controller.current_move.target_resolver, 	\
+								battle.active_battler,										\
+							battle.battlers)
+					var target: Battler = valid_targets.front()
 					if not result.apply(controller, get_controller_for(target)): continue
 					
 					battle_box.update(battle)
-					# TODO -- get_hp_box_for might be slow, dictionary maybe?
+					
 					for c in controllers:
-						get_hp_box_for(c).update()
+						get_hpbox_for(c).update()
 					
 					if result.has_animation():
 						await get_sprite_for(target)	\
