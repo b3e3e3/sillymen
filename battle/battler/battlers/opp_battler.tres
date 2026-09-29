@@ -23,6 +23,7 @@ metadata/_custom_type_script = "uid://did50bnewld6y"
 script = ExtResource("5_a8fy7")
 name = "Green Man"
 level = 13
+primary_type = 2
 primary_sprite = ExtResource("4_fe3ch")
 secondary_sprite = ExtResource("6_d3jkf")
 moves = Array[ExtResource("1_s67p4")]([ExtResource("2_f4d0h"), ExtResource("3_x0fgc")])

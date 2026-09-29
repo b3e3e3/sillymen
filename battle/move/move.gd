@@ -2,6 +2,7 @@ extends Resource
 class_name Move
 
 @export var name: String = "Move"
+@export var type: BattleType.Type
 @export var _animation_name: StringName
 @export var results: Array[MoveResult]
 

@@ -6,6 +6,10 @@ class_name Battler
 @export var level: int = 1
 @export var max_hp: int = 100
 
+@export_category("Type")
+@export var primary_type: BattleType.Type = BattleType.Type.NORMAL
+@export var secondary_type: BattleType.Type = BattleType.Type.NONE
+
 @export_category("Sprites")
 @export var primary_sprite: Texture2D
 @export var secondary_sprite: Texture2D
@@ -31,3 +35,7 @@ func initialize() -> void:
 
 func is_fainted() -> bool:
 	return current_hp == 0
+
+func get_types() -> Array[BattleType.Type]:
+	return [primary_type, secondary_type]
+	

@@ -9,6 +9,7 @@ const MSG_TIME := 1.0
 @export_category("Components")
 @export var controllers: Array[BattlerController]
 @export var battle: BattleState
+@export var type_chart: TypeChart = load("res://battle/battler/type/default_type_chart.tres")
 
 # TODO: decouple UI
 @export_category("UI")

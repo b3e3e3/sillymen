@@ -1,10 +1,11 @@
-[gd_scene load_steps=21 format=3 uid="uid://die5koqu8kq0q"]
+[gd_scene load_steps=22 format=3 uid="uid://die5koqu8kq0q"]
 
 [ext_resource type="Script" uid="uid://l4tdn5b04jks" path="res://battle/battle_simulator.gd" id="1_4dkhb"]
 [ext_resource type="Script" uid="uid://u6dj3ippnaog" path="res://battle/battle_state.gd" id="2_f4huc"]
 [ext_resource type="Script" uid="uid://dhlfd6toycgxx" path="res://battle/battler/battler.gd" id="2_khold"]
 [ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/battler/battlers/textures/purpleman1.png" id="3_bxywf"]
 [ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/battler/battlers/textures/purpleman2.png" id="4_3e3lt"]
+[ext_resource type="Resource" uid="uid://b7ejaxai1j7nw" path="res://battle/battler/type/default_type_chart.tres" id="4_a56dj"]
 [ext_resource type="Script" uid="uid://cjbsv2yrt2727" path="res://battle/player_controller.gd" id="4_j5u3w"]
 [ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/battler/battlers/textures/greenman2.png" id="5_fnwgy"]
 [ext_resource type="Resource" uid="uid://bngds8wlb6f1l" path="res://battle/battler/battlers/player_battler.tres" id="5_qpcvk"]
@@ -244,6 +245,7 @@ script = ExtResource("1_4dkhb")
 autorun = true
 controllers = [NodePath("PlayerController"), NodePath("BattlerController")]
 battle = SubResource("Resource_hq2s5")
+type_chart = ExtResource("4_a56dj")
 animation_player = NodePath("../AnimationPlayer")
 battle_box = NodePath("../UIContainer/UI/BattleBox")
 hp_boxes = [NodePath("../UIContainer/UI/HPBoxLeft"), NodePath("../UIContainer/UI/HPBoxRight")]

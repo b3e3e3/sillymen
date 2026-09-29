@@ -18,8 +18,9 @@ func calculate_damage(controller: BattlerController, target: BattlerController) 
 	var attack := controller.battler.attack.value
 	var defense := target.battler.defense.value
 	var level_divisor := 32.0
+	var effectiveness := controller.simulator.type_chart.get_multipliers(controller.current_move.type, target.battler.get_types())
 	
-	print("level=%s crit=%s power=%s atk=%s def=%s" % [level, crit, power, attack, defense])
+	print("level=%s crit=%s power=%s atk=%s def=%s eff=%s" % [level, crit, power, attack, defense, effectiveness])
 	
 	# DAMAGE ALGORITHM
 	dmg = roundi(((((2.0 * level * crit) / 5.0) + 2.0) * power * (attack / defense)) / level_divisor + 2.0)
