@@ -240,15 +240,12 @@ libraries = {
 &"": SubResource("AnimationLibrary_dxsh4")
 }
 
-[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "animation_player", "battle_box", "hp_boxes", "sprites")]
+[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("animation_player", "battle_box")]
 script = ExtResource("1_4dkhb")
 autorun = true
-controllers = [NodePath("PlayerController"), NodePath("BattlerController")]
 battle = SubResource("Resource_hq2s5")
 animation_player = NodePath("../AnimationPlayer")
 battle_box = NodePath("../UIContainer/UI/BattleBox")
-hp_boxes = [NodePath("../UIContainer/UI/HPBoxLeft"), NodePath("../UIContainer/UI/HPBoxRight")]
-sprites = [NodePath("../PlayerBattlerContainer/PlayerBattlerSprite"), NodePath("../OpponentBattlerContainer/OpponentBattlerSprite")]
 
 [node name="PlayerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("4_j5u3w")

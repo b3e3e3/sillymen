@@ -172,7 +172,7 @@ func step() -> void:
 			for action in _resolve_move(controller):
 				await _present_action(action)
 		
-		BattleState.Phase.POST:
+		BattleState.Phase.POST_MOVE:
 			for e in controller.status_effects.duplicate():
 				await _present_action(PlannedAction.new(e, controller, controller))
 

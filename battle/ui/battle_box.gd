@@ -46,7 +46,7 @@ func get_message(state: BattleState) -> String:
 			print("%s is about to use a move" % [state.active_battler.name])
 			var controller := simulator.get_controller_for(state.active_battler)
 			return "%s used %s!" % [state.active_battler.name, controller.current_move.name]
-		#BattleState.Phase.POST:
+		#BattleState.Phase.POST_MOVE:
 	return ""
 
 func update(state: BattleState) -> void:	
@@ -65,7 +65,7 @@ func update(state: BattleState) -> void:
 					dialog_container.visible = false
 					choice_container.visible = false
 					moves_container.visible = true
-		BattleState.Phase.MOVE, BattleState.Phase.POST:
+		BattleState.Phase.MOVE, BattleState.Phase.POST_MOVE:
 			dialog_container.visible = true
 			choice_container.visible = false
 			moves_container.visible = false

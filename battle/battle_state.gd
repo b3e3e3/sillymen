@@ -8,7 +8,8 @@ enum Phase {
 	START,
 	CHOICE,
 	MOVE,
-	POST,
+	POST_MOVE,
+	
 }
 
 @export var battlers: Array[Battler]
@@ -30,9 +31,9 @@ func process_state() -> void:
 			_next_phase = Phase.MOVE
 		Phase.MOVE:
 			#active_battler.take_turn(self)
-			_next_phase = Phase.POST
+			_next_phase = Phase.POST_MOVE
 			
-		Phase.POST:
+		Phase.POST_MOVE:
 			battlers.push_back(battlers.pop_front())
 			turn_completed.emit()
 			_next_phase = Phase.CHOICE

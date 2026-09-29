@@ -42,6 +42,7 @@ metadata/_custom_type_script = "uid://pyhqcgm1fse5"
 [sub_resource type="Resource" id="Resource_28wrj"]
 script = ExtResource("7_p1hyd")
 status_effect = SubResource("Resource_lvg7q")
+_animation_name = &"poison"
 metadata/_custom_type_script = "uid://bj6hik5o2ihyw"
 
 [sub_resource type="Resource" id="Resource_hkqdy"]
