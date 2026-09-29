@@ -121,14 +121,17 @@ func _present_action(action: PlannedAction) -> void:
 		var spr := get_sprite_for(action.target.battler)
 		if spr and action.result.has_animation():
 			await spr.play_animation(action.result.get_animation())
+			
+		await show_message(action.result.get_hit_message())
 	
 	var msg := action.result.get_result_message() if hits > 0 else "But it missed!"
 	await show_message(msg)
 	
 func show_message(text: String, duration: float = MSG_TIME) -> void:
-	if battle_box and text != "":
-		battle_box.show_message(text)
-		await get_tree().create_timer(duration).timeout
+	if battle_box == null or text == "": return
+	
+	battle_box.show_message(text)
+	await get_tree().create_timer(duration).timeout
 
 func is_player_turn() -> bool:
 	return battle.active_battler == player.battler

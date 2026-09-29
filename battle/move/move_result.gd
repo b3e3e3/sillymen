@@ -29,6 +29,9 @@ func get_valid_targets(user: Battler, battlers: Array[Battler]) -> Array[Battler
 			return battlers.filter(func(b): return user != b)
 	return []
 	
+func get_hit_message() -> String:
+	return ""
+
 func get_result_message() -> String:
 	return ""
 	

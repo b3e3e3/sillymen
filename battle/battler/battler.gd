@@ -13,6 +13,10 @@ class_name Battler
 @export_category("Moves")
 @export var moves: Array[Move]
 
+@export_category("Stats")
+var critical_rate: float = 1.0 / 8
+
+
 var _current_hp: int = -1
 var current_hp: int:
 	get:
