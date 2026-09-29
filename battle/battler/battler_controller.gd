@@ -10,6 +10,7 @@ var current_hp: int:
 		return _current_hp
 	set(val):
 		_current_hp = (clamp(val, 0, battler.max_hp))
+var status_effects: Array[StatusEffect]
 
 @onready var simulator: BattleSimulator = get_parent() # HACK
 
@@ -20,6 +21,10 @@ func _init(default_battler: Battler = null) -> void:
 
 func _ready() -> void:
 	current_hp = battler.max_hp
+	
+func remove_status_effect(e: StatusEffect) -> void:
+	var idx := status_effects.find(e)
+	status_effects.remove_at(idx)
 
 func set_current_move(move: Move):
 	current_move = move

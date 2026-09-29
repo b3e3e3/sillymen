@@ -65,12 +65,8 @@ func update(state: BattleState) -> void:
 					dialog_container.visible = false
 					choice_container.visible = false
 					moves_container.visible = true
-		BattleState.Phase.MOVE:
+		BattleState.Phase.MOVE, BattleState.Phase.POST:
 			dialog_container.visible = true
-			choice_container.visible = false
-			moves_container.visible = false
-		BattleState.Phase.POST:
-			dialog_container.visible = false
 			choice_container.visible = false
 			moves_container.visible = false
 		_:

@@ -6,6 +6,7 @@ enum TargetType {
 	OTHER,
 }
 
+#@export var result_name: String = "Result"
 @export var _animation_name: StringName
 #@export var debug_damage: int = 10
 @export var chance: float = 1.0
@@ -37,6 +38,5 @@ func get_repeat_count() -> int:
 func can_apply() -> bool:
 	return randf() <= chance
 
-### Apply the move result, and return affected controllers
 func apply(_controller: BattlerController, _target: BattlerController) -> bool:
 	return false

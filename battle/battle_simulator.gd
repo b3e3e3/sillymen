@@ -87,19 +87,25 @@ func _refresh_hpboxes() -> void:
 	for c in controllers:
 		get_hpbox_for(c).update()
 
-func _resolve_move(controller: BattlerController) -> Array[PlannedAction]:
+func _resolve_move(controller: BattlerController, move: Move = controller.current_move) -> Array[PlannedAction]:
 	var actions: Array[PlannedAction] = []
-	for result in controller.current_move.get_results():		
-		var valid_targets := result.get_valid_targets(
-			controller.battler,
-			battle.battlers
-		)
-		
-		if valid_targets.is_empty(): continue
+	for result in move.get_results():
+		actions.append_array(_resolve_move_result(controller, result))
+	return actions
+	
+func _resolve_move_result(controller: BattlerController, result: MoveResult) -> Array[PlannedAction]:
+	var actions: Array[PlannedAction] = []
+	var valid_targets := result.get_valid_targets(
+		controller.battler,
+		battle.battlers
+	)
+	
+	if not valid_targets.is_empty():
 		var target_controller := get_controller_for(valid_targets.front())
 		actions.append(PlannedAction.new(result, controller, target_controller))
-		
+	
 	return actions
+
 
 func _present_action(action: PlannedAction) -> void:
 	var landed := true
@@ -109,7 +115,7 @@ func _present_action(action: PlannedAction) -> void:
 		if not action.result.apply(action.user, action.target):
 			landed = false
 			break
-	
+		
 		_refresh_hpboxes()
 		
 		var spr := get_sprite_for(action.target.battler)
@@ -121,8 +127,11 @@ func _present_action(action: PlannedAction) -> void:
 	else:
 		msg = "But it missed!"
 	
-	if battle_box and msg != "":
-		battle_box.show_message(msg)
+	await show_message(msg)
+	
+func show_message(text: String) -> void:
+	if battle_box and text != "":
+		battle_box.show_message(text)
 		await get_tree().create_timer(MSG_TIME).timeout
 
 func is_player_turn() -> bool:
@@ -140,15 +149,22 @@ func step() -> void:
 			print(turn_count + 1, '. ', message)
 			battle_box.show_message(message)
 		
+	var controller := get_controller_for(battle.active_battler)
+	var spr := get_sprite_for(battle.active_battler)
+	
 	match battle.phase:
-		BattleState.Phase.CHOICE:
-			var controller := get_controller_for(battle.active_battler)
-			@warning_ignore("redundant_await")
+		BattleState.Phase.CHOICE:			
+			@warning_ignore("redundant_await") # some controllers await choosing a move
 			controller.set_current_move(await controller.choose_move(battle))
 			
 		BattleState.Phase.MOVE:
-			var controller := get_controller_for(battle.active_battler)
-			var spr := get_sprite_for(battle.active_battler)
+			# purge status effects
+			for e in controller.status_effects.duplicate():
+				if e.has_expired():
+					controller.remove_status_effect(e)
+					await show_message("%s no longer has %s!" % [controller.battler.name, e.name])
+					continue
+			
 			if spr:
 				await spr.play_animation(controller.current_move \
 					.get_animation()) # TODO: missed move
@@ -157,7 +173,8 @@ func step() -> void:
 				await _present_action(action)
 		
 		BattleState.Phase.POST:
-			pass
+			for e in controller.status_effects.duplicate():
+				await _present_action(PlannedAction.new(e, controller, controller))
 
 func run_simulation() -> void:
 	while true:
