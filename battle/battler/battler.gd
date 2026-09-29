@@ -12,3 +12,16 @@ class_name Battler
 
 @export_category("Moves")
 @export var moves: Array[Move]
+
+var _current_hp: int = -1
+var current_hp: int:
+	get:
+		return _current_hp
+	set(val):
+		_current_hp = (clamp(val, 0, max_hp))
+
+func initialize() -> void:
+	_current_hp = max_hp
+
+func is_fainted() -> bool:
+	return current_hp == 0

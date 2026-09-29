@@ -12,7 +12,7 @@ func get_result_message() -> String:
 	
 func apply(_controller: BattlerController, target: BattlerController) -> bool:
 	if not can_apply(): return false
-	target.status_effects.append(status_effect)
+	target.status_effects.append(status_effect.duplicate())
 	_applied_to = target
 	
 	return true
@@ -25,7 +25,7 @@ func apply(_controller: BattlerController, target: BattlerController) -> bool:
 #
 #
 #func get_damage(target: BattlerController) -> int:
-	#return maxi(1, floori(target.current_hp * DAMAGE_MULT))
+	#return maxi(1, floori(target.battler.current_hp * DAMAGE_MULT))
 #
 #func _on_applied(target: BattlerController) -> void:
-	#target.current_hp -= get_damage(target)
+	#target.battler.current_hp -= get_damage(target)

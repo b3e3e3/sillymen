@@ -35,5 +35,5 @@ func _ready() -> void:
 func update() -> void:
 	name_label.text = controller.battler.name
 	level_number_label.text = String.num_uint64(controller.battler.level)
-	hp_number_label.text = String.num_uint64(controller.current_hp)
-	hp_bar.value = float(controller.current_hp) / controller.battler.max_hp
+	hp_number_label.text = String.num_uint64(controller.battler.current_hp)
+	hp_bar.value = float(controller.battler.current_hp) / controller.battler.max_hp

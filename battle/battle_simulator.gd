@@ -18,9 +18,10 @@ const MSG_TIME := 1.0
 @export var sprites: Array[BattlerSprite]
 
 
+#var previous_states: Array[BattleState] = []
 var player: BattlerController
-var previous_states: Array[BattleState] = []
 var turn_count: int = 0
+var simulating := false
 
 var _controller_by_battler: Dictionary = {}
 var _sprite_by_battler: Dictionary = {}
@@ -40,10 +41,10 @@ func _ready() -> void:
 		_controller_by_battler[c.battler] = c
 		if c is PlayerController or c == controllers[0]:
 			player = c
-			print("Assumed player controller as %s" % [c])
 		# register battlers
-		battle.battlers.append(c.battler)
-		print("Registered battler %s" % c.battler.name)
+		if not battle.battlers.has(c.battler):
+			battle.battlers.append(c.battler)
+			print("Registered battler %s" % c.battler.name)
 	
 	battle.turn_completed.connect(func():
 		turn_count += 1
@@ -66,12 +67,12 @@ func update_battle_box() -> void:
 	if message != "":
 		battle_box.show_message(message)
 	
-func log_current_state() -> void:
-	var prev_state := battle.duplicate(true)
-	previous_states.append(prev_state)
-	
-	if previous_states.size() > MAX_STATES:
-		previous_states.pop_front()
+#func log_current_state() -> void:
+	#var prev_state := battle.duplicate(true)
+	#previous_states.append(prev_state)
+	#
+	#if previous_states.size() > MAX_STATES:
+		#previous_states.pop_front()
 	
 func get_controller_for(battler: Battler) -> BattlerController:
 	return _controller_by_battler.get(battler)
@@ -108,37 +109,32 @@ func _resolve_move_result(controller: BattlerController, result: MoveResult) -> 
 
 
 func _present_action(action: PlannedAction) -> void:
-	var landed := true
-	var msg := ""
+	var hits := 0
 	
 	for i in action.result.get_repeat_count():
-		if not action.result.apply(action.user, action.target):
-			landed = false
-			break
+		if action.target.battler.is_fainted(): break
+		if not action.result.apply(action.user, action.target): break
 		
+		hits += 1
 		_refresh_hpboxes()
 		
 		var spr := get_sprite_for(action.target.battler)
 		if spr and action.result.has_animation():
 			await spr.play_animation(action.result.get_animation())
-				
-	if landed:
-		msg = action.result.get_result_message()
-	else:
-		msg = "But it missed!"
 	
+	var msg := action.result.get_result_message() if hits > 0 else "But it missed!"
 	await show_message(msg)
 	
-func show_message(text: String) -> void:
+func show_message(text: String, duration: float = MSG_TIME) -> void:
 	if battle_box and text != "":
 		battle_box.show_message(text)
-		await get_tree().create_timer(MSG_TIME).timeout
+		await get_tree().create_timer(duration).timeout
 
 func is_player_turn() -> bool:
 	return battle.active_battler == player.battler
 
 func step() -> void:
-	log_current_state()
+	#log_current_state()
 	
 	battle.process_state()
 	if battle_box:
@@ -170,12 +166,31 @@ func step() -> void:
 					.get_animation()) # TODO: missed move
 			
 			for action in _resolve_move(controller):
+				if action.target.battler.is_fainted() and action.target != action.user:
+					break
 				await _present_action(action)
 		
 		BattleState.Phase.POST_MOVE:
 			for e in controller.status_effects.duplicate():
 				await _present_action(PlannedAction.new(e, controller, controller))
+				
+		BattleState.Phase.END:
+			await show_message("Battle over.")
+			var living_battlers := battle.get_living_battlers()
+			
+			if living_battlers.is_empty():
+				await show_message("It was a draw!")
+			elif player.battler in living_battlers:
+				await show_message("You won!")
+			else:
+				await show_message("You lost...")
+	print("phase=%s next=%s living=%d" % [
+	BattleState.Phase.keys()[battle.phase],
+	BattleState.Phase.keys()[battle._next_phase],
+	battle.get_living_battlers().size()])
 
 func run_simulation() -> void:
-	while true:
+	simulating = true
+	while simulating:
 		await step()
+		simulating = battle.phase != BattleState.Phase.END

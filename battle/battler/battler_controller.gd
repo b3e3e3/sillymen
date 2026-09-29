@@ -4,12 +4,6 @@ class_name BattlerController
 @export var battler: Battler
 
 var current_move: Move = null
-var _current_hp: int
-var current_hp: int:
-	get:
-		return _current_hp
-	set(val):
-		_current_hp = (clamp(val, 0, battler.max_hp))
 var status_effects: Array[StatusEffect]
 
 @onready var simulator: BattleSimulator = get_parent() # HACK
@@ -18,9 +12,9 @@ var status_effects: Array[StatusEffect]
 func _init(default_battler: Battler = null) -> void:
 	if default_battler:
 		battler = default_battler
-
+		
 func _ready() -> void:
-	current_hp = battler.max_hp
+	battler.initialize()
 	
 func remove_status_effect(e: StatusEffect) -> void:
 	var idx := status_effects.find(e)

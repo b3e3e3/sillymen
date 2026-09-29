@@ -224,7 +224,6 @@ _data = {
 
 [sub_resource type="Resource" id="Resource_hq2s5"]
 script = ExtResource("2_f4huc")
-battlers = Array[ExtResource("2_khold")]([ExtResource("5_qpcvk"), ExtResource("7_y7tyw")])
 metadata/_custom_type_script = "uid://u6dj3ippnaog"
 
 [node name="Battle" type="Control"]
@@ -240,12 +239,15 @@ libraries = {
 &"": SubResource("AnimationLibrary_dxsh4")
 }
 
-[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("animation_player", "battle_box")]
+[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "animation_player", "battle_box", "hp_boxes", "sprites")]
 script = ExtResource("1_4dkhb")
 autorun = true
+controllers = [NodePath("PlayerController"), NodePath("BattlerController")]
 battle = SubResource("Resource_hq2s5")
 animation_player = NodePath("../AnimationPlayer")
 battle_box = NodePath("../UIContainer/UI/BattleBox")
+hp_boxes = [NodePath("../UIContainer/UI/HPBoxLeft"), NodePath("../UIContainer/UI/HPBoxRight")]
+sprites = [NodePath("../OpponentBattlerContainer/OpponentBattlerSprite"), NodePath("../PlayerBattlerContainer/PlayerBattlerSprite")]
 
 [node name="PlayerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("4_j5u3w")

@@ -13,9 +13,9 @@ func get_repeat_count() -> int:
 
 func apply(_controller: BattlerController, target: BattlerController) -> bool:
 	if not can_apply(): return false
-	if target.current_hp == 0: return false
+	#if target.battler.is_fainted(): return false
 	
-	target.current_hp -= damage
+	target.battler.current_hp -= damage
 	affected_targets.append(target)
 	_landed_hits += 1
 	
