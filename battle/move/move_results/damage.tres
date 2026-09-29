@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_x8bxu")
-damage = 10
+power = 30
 _animation_name = &"damage"
 metadata/_custom_type_script = "uid://chdiii32u1cvk"

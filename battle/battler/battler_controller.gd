@@ -17,8 +17,7 @@ func _ready() -> void:
 	battler.initialize()
 	
 func remove_status_effect(e: StatusEffect) -> void:
-	var idx := status_effects.find(e)
-	status_effects.remove_at(idx)
+	status_effects.erase(e)
 
 func set_current_move(move: Move):
 	current_move = move

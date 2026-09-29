@@ -3,7 +3,7 @@ class_name Battler
 
 @export_category("General")
 @export var name: String
-@export var level: int
+@export var level: int = 1
 @export var max_hp: int = 100
 
 @export_category("Sprites")
@@ -14,7 +14,9 @@ class_name Battler
 @export var moves: Array[Move]
 
 @export_category("Stats")
-var critical_rate: float = 1.0 / 8
+@export var attack: Stat = Stat.new(20.0)
+@export var defense: Stat = Stat.new(20.0)
+@export var critical_rate: Stat = Stat.new(1.0 / 8)
 
 
 var _current_hp: int = -1
