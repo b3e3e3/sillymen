@@ -242,6 +242,7 @@ libraries = {
 
 [node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "animation_player", "battle_box", "hp_boxes", "sprites")]
 script = ExtResource("1_4dkhb")
+autorun = true
 controllers = [NodePath("PlayerController"), NodePath("BattlerController")]
 battle = SubResource("Resource_hq2s5")
 animation_player = NodePath("../AnimationPlayer")

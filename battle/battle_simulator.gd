@@ -4,6 +4,8 @@ class_name BattleSimulator
 const MAX_STATES := 100
 const MSG_TIME := 1.0
 
+@export var autorun: bool = false
+
 @export_category("Components")
 @export var controllers: Array[BattlerController]
 @export var battle: BattleState
@@ -25,12 +27,11 @@ var _sprite_by_battler: Dictionary = {}
 var _hpbox_by_controller: Dictionary = {}
 
 
-func is_player_turn() -> bool:
-	return battle.active_battler == player.battler
+func _init(state: BattleState = null) -> void:
+	if state:
+		battle = state
 
 func _ready() -> void:
-	assert(player in controllers, "Player must be one of controllers")
-	
 	for s in sprites:
 		_sprite_by_battler[s.battler] = s
 	for b in hp_boxes:
@@ -39,11 +40,11 @@ func _ready() -> void:
 		_controller_by_battler[c.battler] = c
 		if c is PlayerController or c == controllers[0]:
 			player = c
-			print("Assumed player controller as %s" % [c.name])
+			print("Assumed player controller as %s" % [c])
 		# register battlers
 		battle.battlers.append(c.battler)
 		print("Registered battler %s" % c.battler.name)
-		
+	
 	battle.turn_completed.connect(func():
 		turn_count += 1
 	)
@@ -56,7 +57,8 @@ func _ready() -> void:
 		await animation_player.animation_finished
 		animation_player.play(&"RESET")
 	
-	run_simulation()
+	if autorun:
+		run_simulation()
 	
 func update_battle_box() -> void:
 	if not battle_box: return
@@ -72,15 +74,16 @@ func log_current_state() -> void:
 		previous_states.pop_front()
 	
 func get_controller_for(battler: Battler) -> BattlerController:
-	return _controller_by_battler[battler]
+	return _controller_by_battler.get(battler)
 	
 func get_sprite_for(battler: Battler) -> BattlerSprite:
-	return _sprite_by_battler[battler]
+	return _sprite_by_battler.get(battler)
 	
 func get_hpbox_for(controller: BattlerController) -> HPBox:
-	return _hpbox_by_controller[controller]
+	return _hpbox_by_controller.get(controller)
 	
 func _refresh_hpboxes() -> void:
+	if hp_boxes.is_empty(): return
 	for c in controllers:
 		get_hpbox_for(c).update()
 
@@ -108,10 +111,10 @@ func _present_action(action: PlannedAction) -> void:
 			break
 	
 		_refresh_hpboxes()
-	
-		if action.result.has_animation():
-			await get_sprite_for(action.target.battler)	\
-					.play_animation(action.result.get_animation())
+		
+		var spr := get_sprite_for(action.target.battler)
+		if spr and action.result.has_animation():
+			await spr.play_animation(action.result.get_animation())
 				
 	if landed:
 		msg = action.result.get_result_message()
@@ -121,6 +124,9 @@ func _present_action(action: PlannedAction) -> void:
 	if battle_box and msg != "":
 		battle_box.show_message(msg)
 		await get_tree().create_timer(MSG_TIME).timeout
+
+func is_player_turn() -> bool:
+	return battle.active_battler == player.battler
 
 func step() -> void:
 	log_current_state()
@@ -142,8 +148,9 @@ func step() -> void:
 			
 		BattleState.Phase.MOVE:
 			var controller := get_controller_for(battle.active_battler)
-			await get_sprite_for(battle.active_battler)					\
-					.play_animation(controller.current_move				\
+			var spr := get_sprite_for(battle.active_battler)
+			if spr:
+				await spr.play_animation(controller.current_move \
 					.get_animation()) # TODO: missed move
 			
 			for action in _resolve_move(controller):

@@ -14,6 +14,10 @@ var current_hp: int:
 @onready var simulator: BattleSimulator = get_parent() # HACK
 
 
+func _init(default_battler: Battler = null) -> void:
+	if default_battler:
+		battler = default_battler
+
 func _ready() -> void:
 	current_hp = battler.max_hp
 

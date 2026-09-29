@@ -2,7 +2,6 @@
 extends Control
 class_name BattlerSprite
 
-signal _move_resolved
 signal hit_frame
 
 @export var battler: Battler
@@ -15,13 +14,26 @@ signal hit_frame
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 
+func _init(p_battler: Battler = null) -> void:
+	if p_battler:
+		battler = p_battler
+
 func _ready() -> void:
+	primary_sprite = battler.primary_sprite
+	secondary_sprite = battler.secondary_sprite
+	
+	if not texture:
+		texture = TextureRect.new()
+		add_child(texture)
+	
 	switch_primary_sprite()
 		
 func trigger_hit_frame() -> void:
 	hit_frame.emit()
 
 func play_animation(anim: StringName) -> void:
+	if not animation_player: return
+	
 	if not animation_player.has_animation(anim):
 		push_warning("No animation '%s' found" % [anim])
 		return
