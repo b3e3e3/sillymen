@@ -77,3 +77,10 @@ map = NodePath("../TileMapLayer")
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = SubResource("AtlasTexture_a076f")
 centered = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+limit_left = 0
+limit_top = 0
+limit_right = 1152
+limit_bottom = 648
