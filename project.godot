@@ -15,6 +15,10 @@ run/main_scene="uid://die5koqu8kq0q"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[dotnet]
+
+project/assembly_name="sillymen"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/script-ide/plugin.cfg", "res://addons/gdUnit4/plugin.cfg")
