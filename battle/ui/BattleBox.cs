@@ -7,7 +7,7 @@ namespace Sillymen;
 [GlobalClass]
 public partial class BattleBox : Control
 {
-    private enum Screen
+    public enum Screen
     {
         NORMAL,
         MOVE_CHOICE,
@@ -28,16 +28,19 @@ public partial class BattleBox : Control
     private Control? moves_container;
 
     private string message = "";
-    private Screen screen = Screen.NORMAL;
+    public Screen screen = Screen.NORMAL;
 
     private void build_move_choices(Battler battler)
     {
+        var children = moves_container?.GetChildren() ?? [];
+        if (children.Count > 0) return; // TODO: if moves need to change during battle, dont do this
+
         var scene = GD.Load<PackedScene>("res://battle/ui/move_button.tscn");
 
-        foreach (var c in moves_container?.GetChildren() ?? [])
-        {
-            c.QueueFree();
-        }
+        // foreach (var c in children)
+        // {
+        //     c.QueueFree();
+        // }
 
         foreach (var move in battler.moves)
         {
@@ -67,14 +70,14 @@ public partial class BattleBox : Control
             case BattleState.Phase.CHOICE:
                 if (simulator?.is_player_turn() == true)
                 {
-                    return $"What will {state.active_battler.name} do?";
+                    return $"What will {state.active_battler?.name} do?";
                 }
                 break;
             case BattleState.Phase.MOVE:
-                Console.WriteLine($"{state.active_battler.name} is about to use a move!");
+                GD.Print($"{state.active_battler?.name} is about to use a move!");
 
                 var controller = simulator?.get_controller_for(state.active_battler);
-                return $"{state.active_battler.name} used {controller?.current_move.name}!";
+                return $"{state.active_battler?.name} used {controller?.current_move.name}!";
             // case BattleState.Phase.POST_MOVE:
         }
 
@@ -84,6 +87,7 @@ public partial class BattleBox : Control
     public void update(BattleState.Phase phase)
     {
         dialog_label?.Text = message; // get_message(state);
+
         switch (phase)
         {
             case BattleState.Phase.CHOICE:

@@ -9,10 +9,10 @@ public partial class BattlerController : Node
 {
     [Export] public Battler battler { get; set; }
     public Move current_move { get; set; } = null;
-    public Array<StatusEffect> status_effects;
+    public Array<StatusEffect> status_effects { get; set; } = [];
     public BattleSimulator simulator { get; protected set; }
-    
-    public BattlerController() {}
+
+    public BattlerController() { }
     public BattlerController(Battler default_battler)
     {
         battler = default_battler;

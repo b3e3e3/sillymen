@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="TypeChart" load_steps=2 format=3 uid="uid://xaamssqr3lb5"]
+[gd_resource type="Resource" script_class="TypeChart" load_steps=2 format=3 uid="uid://b7ejaxai1j7nw"]
 
 [ext_resource type="Script" uid="uid://fesltf1dhkkw" path="res://battle/battler/type/TypeChart.cs" id="1_wwy3b"]
 
 [resource]
 script = ExtResource("1_wwy3b")
 types = Array[Object]([])
-metadata/_custom_type_script = "uid://fesltf1dhkkw"
+metadata/_custom_type_script = "uid://dx4gmwdlg5q1s"

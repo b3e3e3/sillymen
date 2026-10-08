@@ -22,7 +22,7 @@ public partial class Battler : Resource
     [Export] public Texture2D secondary_sprite { get; set; }
 
     [ExportCategory("Moves")]
-    [Export] public Array<Move> moves { get; set; }
+    [Export] public Array<Move> moves { get; set; } = [];
 
     [ExportCategory("Stats")]
     [Export] public Stat attack = new(20.0f);

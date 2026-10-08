@@ -31,7 +31,7 @@ public partial class AttackMoveResult : MoveResult
         var level_divisor = 32.0f;
         var effectiveness = controller.simulator.type_chart?.get_multipliers(controller.current_move.type, target.battler.get_types());
 
-        Console.WriteLine($"level={level} crit={crit} power={power} atk={attack} def={defense} eff={effectiveness}");
+        GD.Print($"level={level} crit={crit} power={power} atk={attack} def={defense} eff={effectiveness}");
 
         dmg = Mathf.RoundToInt(((2.0f * level * crit / 5.0f) + 2.0f) * power * (attack / defense) / level_divisor + 2.0f);
 

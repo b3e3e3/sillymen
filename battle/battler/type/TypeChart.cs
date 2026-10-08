@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using Godot.Collections;
 
@@ -8,18 +9,15 @@ namespace Sillymen;
 [GlobalClass]
 public partial class TypeChart : Resource
 {
-    [Export] public Array<BattleType> types;
+    [Export] public Array<BattleType> types = [];
 
 
     public TypeChart()
     {
         foreach (var type in Enum.GetValues<BattleType.Type>())
         {
-            var bt = new BattleType
-            {
-                type = type
-            };
-            types.Add(bt);
+            if (types.Any(bt => bt.type == type)) continue;
+            types.Add(new BattleType { type = type });
         }
     }
 
@@ -43,7 +41,7 @@ public partial class TypeChart : Resource
             var mult = get_multiplier(attacking, defending);
             total_mult *= mult;
             
-            Console.WriteLine($"{Enum.GetName(attacking)} eff against {Enum.GetName(defending)}? {mult}");
+            GD.Print($"{Enum.GetName(attacking)} eff against {Enum.GetName(defending)}? {mult}");
         }
         return total_mult;
     }

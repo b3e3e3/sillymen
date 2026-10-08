@@ -59,9 +59,11 @@ public partial class BattleSimulator : Node
             {
                 controller = c,
                 battler = c.battler,
-                sprite = (from s in sprites where s != null select s).FirstOrDefault(),
-                hp_box = (from b in hp_boxes where b != null select b).FirstOrDefault(),
+                sprite = sprites.ElementAtOrDefault(controllers.IndexOf(c)),
+                hp_box = hp_boxes.ElementAtOrDefault(controllers.IndexOf(c)),
             };
+
+            references.Add(r);
 
             if (c.GetType() == typeof(PlayerBattlerController) || c == controllers[0])
             {
@@ -71,7 +73,7 @@ public partial class BattleSimulator : Node
             if (battle.battlers.Contains(c.battler) == false)
             {
                 battle.battlers.Add(c.battler);
-                Console.WriteLine($"Registered battler {c.battler.name}!");
+                GD.Print($"Registered battler {c.battler.name}!");
             }
         }
 
@@ -100,14 +102,19 @@ public partial class BattleSimulator : Node
         // log_current_state();
 
         battle.process_state();
+
+        GD.Print("We step");
+        GD.Print(Enum.GetName(battle.phase));
+        GD.Print(Enum.GetName(battle_box!.screen));
+
         if (battle_box != null)
         {
             battle_box.update(battle.phase);
-            string? message = battle_box?.get_message(battle);
+            string? message = battle_box.get_message(battle);
             if (message != null)
             {
-                Console.WriteLine($"{turn_count + 1}. {message}");
-                battle_box?.show_message(message);
+                GD.Print($"{turn_count + 1}. {message}");
+                battle_box.show_message(message);
             }
         }
 
@@ -184,16 +191,30 @@ public partial class BattleSimulator : Node
 
     public async Task run_simulation()
     {
-        simulating = false;
-        while (simulating)
+        try
         {
-            await step();
-            simulating = battle.phase != BattleState.Phase.END;
+            simulating = true;
+            while (simulating)
+            {
+                await step();
+                simulating = battle.phase != BattleState.Phase.END;
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PushError(e.ToString());
+            throw;
         }
     }
 
-    public BattlerController? get_controller_for(Battler? battler) => (from r in references where r.battler == battler select r.controller).First();
-    private BattlerSprite? get_sprite_for(Battler? battler) => (from r in references where r.battler == battler select r.sprite).First();
+    public BattlerController? get_controller_for(Battler? battler) =>
+    battler == null ? null
+        : references.FirstOrDefault(r => r.battler == battler)?.controller;
+
+    private BattlerSprite? get_sprite_for(Battler? battler) =>
+    battler == null ? null
+            : references.FirstOrDefault(r => r.battler == battler)?.sprite;
+
     // private HPBox? get_hpbox_for(BattlerController? controller) => (from r in references where r.controller == controller select r.hp_box).First();
 
 
@@ -249,8 +270,7 @@ public partial class BattleSimulator : Node
             }
 
             var hit_msg = action.Result.get_hit_message();
-            if (hit_msg == null) return;
-            await show_message(hit_msg);
+            if (hit_msg != null) await show_message(hit_msg);
         }
 
         var result_msg = action.Result.get_result_message();

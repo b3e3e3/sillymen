@@ -10,12 +10,12 @@ public partial class Move : Resource
     [Export] public string name = "Move";
     [Export] public BattleType.Type type;
     [Export] private StringName _animation_name;
-    private Array<MoveResult> _results { get; set; }
+    private Array<MoveResult> _results = [];
 
     [Export]
     public Array<MoveResult> results
     {
-        get => [.. (from r in results select (r.Duplicate())).OfType<MoveResult>()];
+        get => [.. (from r in _results select (r.Duplicate())).OfType<MoveResult>()];
         set => _results = value;
     }
 

@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -22,24 +23,30 @@ public partial class BattleState : Resource
         END,
     }
 
-    [Export] public Battler active_battler { get; set; }
+    [Export] public Battler? active_battler { get; set; }
     [Export] public Array<Battler> battlers { get; set; } = [];
 
     public Phase phase = Phase.START;
     private Phase next_phase;
-    private Queue<Battler> _turn_queue;
-    private Queue<Battler> turn_queue => _turn_queue ??= new Queue<Battler>(battlers);
+    private int turn_index;
 
     public BattleState()
     {
         next_phase = phase;
     }
 
-    public Array<Battler> get_living_battlers() => (from b in battlers where !b.is_fainted() select b) as Array<Battler>;
-    public void next_battler() => turn_queue.Enqueue(turn_queue.Dequeue());
+    public Array<Battler> get_living_battlers() =>
+        [.. battlers.Where(b => !b.is_fainted())];
+
+    public void next_battler()
+    {
+        if (battlers.Count == 0) return;
+        turn_index = (turn_index + 1) % battlers.Count;
+    }
+
     public void process_state()
     {
-        var phase = next_phase;
+        phase = next_phase;
 
         if (phase == Phase.CHOICE && get_living_battlers().Count <= 1)
         {
@@ -50,12 +57,13 @@ public partial class BattleState : Resource
         switch (phase)
         {
             case Phase.START:
+                turn_index = 0;
                 next_phase = Phase.CHOICE;
                 break;
             case Phase.CHOICE:
-                while (battlers[0].is_fainted())
+                while (battlers[turn_index].is_fainted())
                     next_battler();
-                active_battler = battlers[0];
+                active_battler = battlers[turn_index];
                 EmitSignal(SignalName.TurnStarted, active_battler);
                 next_phase = Phase.MOVE;
                 break;
@@ -69,7 +77,6 @@ public partial class BattleState : Resource
                 break;
             case Phase.END:
                 break;
-
         }
     }
 }
