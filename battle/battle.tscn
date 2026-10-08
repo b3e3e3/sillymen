@@ -1,18 +1,12 @@
-[gd_scene load_steps=31 format=3 uid="uid://die5koqu8kq0q"]
+[gd_scene load_steps=17 format=3 uid="uid://die5koqu8kq0q"]
 
 [ext_resource type="Script" uid="uid://u616j31r0fvo" path="res://battle/BattleSimulator.cs" id="1_iorop"]
 [ext_resource type="Script" uid="uid://cvaq1obeq4oye" path="res://battle/BattleState.cs" id="2_hvjow"]
 [ext_resource type="Resource" uid="uid://xaamssqr3lb5" path="res://battle/battler/type/default_type_chart.tres" id="3_qybyd"]
-[ext_resource type="Script" uid="uid://l8j1mj70vmcd" path="res://battle/battler/stats/Stat.cs" id="3_vlrs1"]
-[ext_resource type="Script" uid="uid://4ns5lqptba5u" path="res://battle/battler/Battler.cs" id="4_hvjow"]
 [ext_resource type="Script" uid="uid://bewlkg1vsqgig" path="res://battle/PlayerBattlerController.cs" id="4_j5u3w"]
-[ext_resource type="Script" uid="uid://8yxdw5wylig2" path="res://battle/move/AttackMoveResult.cs" id="6_dxsh4"]
-[ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/battler/battlers/textures/purpleman1.png" id="6_tkkqt"]
-[ext_resource type="Script" uid="uid://dsdfl6tcv3hk3" path="res://battle/move/Move.cs" id="7_phvbk"]
+[ext_resource type="Resource" uid="uid://bngds8wlb6f1l" path="res://battle/battler/battlers/player_battler.tres" id="5_a56dj"]
+[ext_resource type="Resource" uid="uid://dw6yfa0vl8spt" path="res://battle/battler/battlers/opp_battler.tres" id="7_qybyd"]
 [ext_resource type="Script" uid="uid://cryo6wjlljyl" path="res://battle/battler/BattlerController.cs" id="7_tkkqt"]
-[ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/battler/battlers/textures/purpleman2.png" id="8_a56dj"]
-[ext_resource type="Texture2D" uid="uid://drslfgo3vq7iw" path="res://battle/battler/battlers/textures/greenman1.png" id="10_dxsh4"]
-[ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/battler/battlers/textures/greenman2.png" id="11_phvbk"]
 [ext_resource type="Theme" uid="uid://b6uu72pmk28gc" path="res://battle/ui/battlebox.theme" id="12_wtxou"]
 [ext_resource type="Script" uid="uid://djsii16smpeq5" path="res://battle/ui/BattleBox.cs" id="13_8j1rm"]
 [ext_resource type="PackedScene" uid="uid://bn351hwwdw8my" path="res://battle/battler/battler.tscn" id="13_on6y3"]
@@ -133,56 +127,6 @@ script = ExtResource("2_hvjow")
 battlers = null
 metadata/_custom_type_script = "uid://cvaq1obeq4oye"
 
-[sub_resource type="Resource" id="Resource_dxsh4"]
-script = ExtResource("3_vlrs1")
-base_value = 20.0
-
-[sub_resource type="Resource" id="Resource_phvbk"]
-script = ExtResource("3_vlrs1")
-base_value = 0.125
-
-[sub_resource type="Resource" id="Resource_sf8fp"]
-script = ExtResource("3_vlrs1")
-base_value = 20.0
-
-[sub_resource type="Resource" id="Resource_ju8jl"]
-script = ExtResource("6_dxsh4")
-power = 10
-_animation_name = &"damage"
-metadata/_custom_type_script = "uid://8yxdw5wylig2"
-
-[sub_resource type="Resource" id="Resource_xmbur"]
-script = ExtResource("7_phvbk")
-name = "Funny Blast"
-type = 3
-_animation_name = &"funnyblast"
-results = Array[Object]([SubResource("Resource_ju8jl")])
-metadata/_custom_type_script = "uid://dsdfl6tcv3hk3"
-
-[sub_resource type="Resource" id="Resource_rgsk0"]
-script = ExtResource("4_hvjow")
-name = "Purple Man"
-primary_sprite = ExtResource("6_tkkqt")
-secondary_sprite = ExtResource("8_a56dj")
-moves = Array[Object]([SubResource("Resource_xmbur")])
-metadata/_custom_type_script = "uid://4ns5lqptba5u"
-
-[sub_resource type="Resource" id="Resource_ihybe"]
-script = ExtResource("7_phvbk")
-name = "Funny Blast"
-type = 3
-_animation_name = &"funnyblast"
-results = Array[Object]([SubResource("Resource_ju8jl")])
-metadata/_custom_type_script = "uid://dsdfl6tcv3hk3"
-
-[sub_resource type="Resource" id="Resource_tkkqt"]
-script = ExtResource("4_hvjow")
-name = "Green Man"
-primary_sprite = ExtResource("10_dxsh4")
-secondary_sprite = ExtResource("11_phvbk")
-moves = Array[Object]([SubResource("Resource_ihybe")])
-metadata/_custom_type_script = "uid://4ns5lqptba5u"
-
 [node name="Battle" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -210,11 +154,11 @@ metadata/_custom_type_script = "uid://u616j31r0fvo"
 
 [node name="PlayerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("4_j5u3w")
-battler = SubResource("Resource_rgsk0")
+battler = ExtResource("5_a56dj")
 
 [node name="BattlerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("7_tkkqt")
-battler = SubResource("Resource_tkkqt")
+battler = ExtResource("7_qybyd")
 
 [node name="PlayerBattlerContainer" type="Control" parent="."]
 layout_mode = 1

@@ -1,39 +1,39 @@
 [gd_resource type="Resource" script_class="Battler" load_steps=22 format=3 uid="uid://bngds8wlb6f1l"]
 
-[ext_resource type="Script" uid="uid://did50bnewld6y" path="res://battle/battler/stats/stat.gd" id="1_28wrj"]
-[ext_resource type="Script" uid="uid://bgkl88cjh18f6" path="res://battle/move/move.gd" id="1_orhjr"]
-[ext_resource type="Resource" uid="uid://c1feemvcb11wm" path="res://battle/battler/stats/crit_rate_stat.tres" id="2_hkqdy"]
+[ext_resource type="Script" uid="uid://l8j1mj70vmcd" path="res://battle/battler/stats/Stat.cs" id="1_28wrj"]
+[ext_resource type="Script" uid="uid://dsdfl6tcv3hk3" path="res://battle/move/Move.cs" id="1_orhjr"]
 [ext_resource type="Resource" uid="uid://003vgvdiuqot" path="res://battle/move/moves/funnyblast.tres" id="2_wrd01"]
 [ext_resource type="Resource" uid="uid://d35tmc7sqcnhf" path="res://battle/move/moves/assmove.tres" id="3_28e3e"]
-[ext_resource type="Script" uid="uid://chdiii32u1cvk" path="res://battle/move/move_result.gd" id="4_qbeoq"]
+[ext_resource type="Script" uid="uid://bn4b75oyf0m71" path="res://battle/move/MoveResult.cs" id="4_qbeoq"]
 [ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/battler/battlers/textures/purpleman1.png" id="4_y2toi"]
-[ext_resource type="Script" uid="uid://dhlfd6toycgxx" path="res://battle/battler/battler.gd" id="5_dqlhm"]
-[ext_resource type="Script" uid="uid://dv8e26se7fpvx" path="res://battle/move/attack_result.gd" id="5_pbicj"]
+[ext_resource type="Script" uid="uid://4ns5lqptba5u" path="res://battle/battler/Battler.cs" id="5_dqlhm"]
+[ext_resource type="Script" uid="uid://8yxdw5wylig2" path="res://battle/move/AttackMoveResult.cs" id="5_pbicj"]
 [ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/battler/battlers/textures/purpleman2.png" id="6_ler4l"]
-[ext_resource type="Script" uid="uid://bxgekd8sqsc0l" path="res://battle/move/buff_result.gd" id="7_no6dl"]
-[ext_resource type="Script" uid="uid://bj6hik5o2ihyw" path="res://battle/move/status_result.gd" id="7_p1hyd"]
-[ext_resource type="Script" uid="uid://pyhqcgm1fse5" path="res://battle/move/status_effect/poison_status_effect.gd" id="8_p1hyd"]
+[ext_resource type="Script" uid="uid://b1ehb1dbdvkkq" path="res://battle/move/BuffMoveResult.cs" id="7_no6dl"]
+[ext_resource type="Script" uid="uid://dwatt7c3yn0i6" path="res://battle/move/StatusMoveResult.cs" id="7_p1hyd"]
+[ext_resource type="Script" uid="uid://dub2o50m8hgwn" path="res://battle/move/status_effect/PoisonStatusEffect.cs" id="8_p1hyd"]
+
+[sub_resource type="Resource" id="Resource_28wrj"]
+script = ExtResource("1_28wrj")
+base_value = 84.0
+metadata/_custom_type_script = "uid://did50bnewld6y"
 
 [sub_resource type="Resource" id="Resource_xjw84"]
 script = ExtResource("1_28wrj")
-base = 14.0
-metadata/_custom_type_script = "uid://did50bnewld6y"
-
-[sub_resource type="Resource" id="Resource_auqr8"]
-script = ExtResource("1_28wrj")
-base = 20.0
+base_value = 43.0
 metadata/_custom_type_script = "uid://did50bnewld6y"
 
 [sub_resource type="Resource" id="Resource_qbeoq"]
 script = ExtResource("5_pbicj")
-power = 100
+power = 20
 max_hits = 3
 _animation_name = &"damage"
 metadata/_custom_type_script = "uid://dv8e26se7fpvx"
 
 [sub_resource type="Resource" id="Resource_no6dl"]
 script = ExtResource("7_no6dl")
-amount = 10
+_animation_name = &"boost"
+chance = 0.5
 target_type = 0
 metadata/_custom_type_script = "uid://bxgekd8sqsc0l"
 
@@ -48,32 +48,34 @@ metadata/_custom_type_script = "uid://bgkl88cjh18f6"
 [sub_resource type="Resource" id="Resource_lvg7q"]
 script = ExtResource("8_p1hyd")
 name = "Poison"
-max_turns = 3
 _animation_name = &"poison"
-metadata/_custom_type_script = "uid://pyhqcgm1fse5"
+metadata/_custom_type_script = "uid://dub2o50m8hgwn"
 
-[sub_resource type="Resource" id="Resource_28wrj"]
+[sub_resource type="Resource" id="Resource_red83"]
 script = ExtResource("7_p1hyd")
 status_effect = SubResource("Resource_lvg7q")
 _animation_name = &"poison"
-metadata/_custom_type_script = "uid://bj6hik5o2ihyw"
+metadata/_custom_type_script = "uid://dwatt7c3yn0i6"
 
 [sub_resource type="Resource" id="Resource_hkqdy"]
 script = ExtResource("1_orhjr")
 name = "Poy Shawn"
 _animation_name = &"funnyblast"
-results = Array[ExtResource("4_qbeoq")]([SubResource("Resource_28wrj")])
+results = Array[ExtResource("4_qbeoq")]([SubResource("Resource_red83")])
 metadata/_custom_type_script = "uid://bgkl88cjh18f6"
+
+[sub_resource type="Resource" id="Resource_auqr8"]
+script = ExtResource("1_28wrj")
+base_value = 65.0
 
 [resource]
 script = ExtResource("5_dqlhm")
 name = "Purple Man"
-level = 11
+level = 50
 primary_type = 3
 primary_sprite = ExtResource("4_y2toi")
 secondary_sprite = ExtResource("6_ler4l")
 moves = Array[ExtResource("1_orhjr")]([ExtResource("2_wrd01"), ExtResource("3_28e3e"), SubResource("Resource_s2wqd"), SubResource("Resource_hkqdy")])
-attack = SubResource("Resource_xjw84")
-defense = SubResource("Resource_auqr8")
-critical_rate = ExtResource("2_hkqdy")
-metadata/_custom_type_script = "uid://dhlfd6toycgxx"
+attack = SubResource("Resource_28wrj")
+defense = SubResource("Resource_xjw84")
+speed = SubResource("Resource_auqr8")

@@ -10,16 +10,21 @@ public partial class BattlerSprite : Control
     [Signal]
     public delegate void HitFrameEventHandler();
 
-    [Export] public Battler? battler { get; set; }
+    [Export]
+    public Battler? battler { get; set; }
 
     [ExportCategory("Sprites")]
-    [Export] public Texture2D? primary_sprite { get; set; }
-    [Export] public Texture2D? secondary_sprite { get; set; }
+    [Export]
+    public Texture2D? primary_sprite { get; set; }
+
+    [Export]
+    public Texture2D? secondary_sprite { get; set; }
 
     public TextureRect? texture;
     public AnimationPlayer? animation_player;
 
     public BattlerSprite() { }
+
     public BattlerSprite(Battler battler)
     {
         this.battler = battler;
@@ -27,8 +32,8 @@ public partial class BattlerSprite : Control
 
     public override void _Ready()
     {
-        primary_sprite ??= battler?.primary_sprite;
-        secondary_sprite ??= battler?.secondary_sprite;
+        primary_sprite = battler?.primary_sprite; // used to be ??=
+        secondary_sprite = battler?.secondary_sprite; // used to be ??=
 
         animation_player ??= GetNode<AnimationPlayer>("AnimationPlayer");
         // if (texture == null)...
@@ -40,7 +45,8 @@ public partial class BattlerSprite : Control
 
     public async Task play_animation(StringName anim)
     {
-        if (animation_player == null) return;
+        if (animation_player == null)
+            return;
         if (!animation_player.HasAnimation(anim))
         {
             GD.PushWarning($"No animation '{anim}' found.");
@@ -76,5 +82,6 @@ public partial class BattlerSprite : Control
     }
 
     public void switch_primary_sprite() => texture?.Texture = primary_sprite;
+
     public void switch_secondary_sprite() => texture?.Texture = secondary_sprite;
 }

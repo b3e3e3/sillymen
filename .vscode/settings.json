@@ -1,3 +1,5 @@
 {
-    "dotnet.defaultSolution": "sillymen.sln"
+    "dotnet.defaultSolution": "sillymen.sln",
+    "editor.defaultFormatter": "csharpier.csharpier-vscode",
+    "editor.formatOnSave": true
 }

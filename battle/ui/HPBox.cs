@@ -13,9 +13,7 @@ public partial class HPBox : Control
     private RichTextLabel hp_number_label;
     private ProgressBar hp_bar;
 
-    public HPBox()
-    {
-    }
+    public HPBox() { }
 
     public HPBox(BattlerController controller = null)
     {
@@ -40,6 +38,6 @@ public partial class HPBox : Control
         name_label.Text = controller.battler.name;
         level_number_label.Text = controller.battler.level.ToString();
         hp_number_label.Text = controller.battler.current_hp.ToString();
-        hp_bar.Value = controller.battler.current_hp / controller.battler.max_hp;
+        hp_bar.Value = (float)controller.battler.current_hp / controller.battler.max_hp;
     }
 }
