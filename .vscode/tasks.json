@@ -1,0 +1,56 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "link-godot-binary",
+      "command": "gdvm",
+      "detail": "Link/copy Godot via gdvm into .gdvm for this workspace.",
+      "args": [
+        "link",
+        "--csharp",
+        "--force",
+        "${workspaceFolder}/.gdvm/godot"
+      ],
+      "windows": {
+        "args": [
+          "link",
+          "--csharp",
+          "--force",
+          "${workspaceFolder}\\.gdvm\\godot.exe",
+        ],
+      },
+      "osx": {
+        "args": [
+          "link",
+          "--csharp",
+          "--force",
+          "${workspaceFolder}/.gdvm/Godot.app",
+        ],
+      },
+    },
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build"
+      ],
+      "problemMatcher": "$msCompile",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "prep-for-run",
+      "dependsOn": [
+        "link-godot-binary",
+        "build",
+      ]
+    }
+  ],
+}

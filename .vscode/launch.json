@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Godot via gdvm (launch)",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/.gdvm/godot",
+      "args": ["--path", "${workspaceFolder}"],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "prep-for-run",
+      "windows": {
+        "program": "${workspaceFolder}\\.gdvm\\godot.exe",
+      },
+      "osx": {
+        "program": "${workspaceFolder}/.gdvm/Godot.app/Contents/MacOS/Godot",
+      },
+    },
+  ],
+}
