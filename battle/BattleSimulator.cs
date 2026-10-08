@@ -28,7 +28,7 @@ public partial class BattleSimulator : Node
     [ExportCategory("Components")]
     [Export] public Array<BattlerController> controllers { get; set; } = [];
     [Export] public required BattleState battle { get; set; }
-    [Export] public TypeChart type_chart = GD.Load<TypeChart>("res://battle/battler/type/default_type_chart.tres");
+    [Export] public TypeChart? type_chart;
 
     // TODO: Decouple UI
     [ExportCategory("UI")]
@@ -51,6 +51,8 @@ public partial class BattleSimulator : Node
 
     public async override void _Ready()
     {
+        type_chart ??= GD.Load<TypeChart>("res://battle/battler/type/default_type_chart.tres");
+
         foreach (var c in controllers)
         {
             var r = new BattlerReference

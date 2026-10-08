@@ -29,7 +29,7 @@ public partial class AttackMoveResult : MoveResult
         var attack = controller.battler.attack.value;
         var defense = target.battler.defense.value;
         var level_divisor = 32.0f;
-        var effectiveness = controller.simulator.type_chart.get_multipliers(controller.current_move.type, target.battler.get_types());
+        var effectiveness = controller.simulator.type_chart?.get_multipliers(controller.current_move.type, target.battler.get_types());
 
         Console.WriteLine($"level={level} crit={crit} power={power} atk={attack} def={defense} eff={effectiveness}");
 

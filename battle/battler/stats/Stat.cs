@@ -38,6 +38,7 @@ public partial class Stat : Resource
     private float _cached_value;
     private bool _dirty = true;
 
+    public Stat() { }
     public Stat(float? stat_value)
     {
         base_value = stat_value ?? base_value;

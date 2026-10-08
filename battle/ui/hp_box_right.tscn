@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dasiip6ol7036"]
 
 [ext_resource type="Theme" uid="uid://6j5ou4yhwnro" path="res://battle/ui/hpbox.theme" id="1_1duwj"]
-[ext_resource type="Script" uid="uid://d0qk1r73hdfs4" path="res://battle/ui/hp_box.gd" id="2_0kwhq"]
+[ext_resource type="Script" uid="uid://ckl6hbqkgjdfj" path="res://battle/ui/HPBox.cs" id="2_0kwhq"]
 
 [node name="HPBoxContainer" type="PanelContainer"]
 anchors_preset = -1

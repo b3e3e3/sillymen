@@ -1,19 +1,13 @@
-[gd_scene load_steps=22 format=3 uid="uid://die5koqu8kq0q"]
+[gd_scene load_steps=21 format=3 uid="uid://die5koqu8kq0q"]
 
-[ext_resource type="Script" uid="uid://l4tdn5b04jks" path="res://battle/battle_simulator.gd" id="1_4dkhb"]
-[ext_resource type="Script" uid="uid://u6dj3ippnaog" path="res://battle/battle_state.gd" id="2_f4huc"]
-[ext_resource type="Script" uid="uid://dhlfd6toycgxx" path="res://battle/battler/battler.gd" id="2_khold"]
-[ext_resource type="Texture2D" uid="uid://dunlkuo2srblc" path="res://battle/battler/battlers/textures/purpleman1.png" id="3_bxywf"]
-[ext_resource type="Texture2D" uid="uid://bphn72m1o75lu" path="res://battle/battler/battlers/textures/purpleman2.png" id="4_3e3lt"]
-[ext_resource type="Resource" uid="uid://b7ejaxai1j7nw" path="res://battle/battler/type/default_type_chart.tres" id="4_a56dj"]
-[ext_resource type="Script" uid="uid://cjbsv2yrt2727" path="res://battle/player_controller.gd" id="4_j5u3w"]
-[ext_resource type="Texture2D" uid="uid://dfsauyx4abf82" path="res://battle/battler/battlers/textures/greenman2.png" id="5_fnwgy"]
-[ext_resource type="Resource" uid="uid://bngds8wlb6f1l" path="res://battle/battler/battlers/player_battler.tres" id="5_qpcvk"]
-[ext_resource type="Texture2D" uid="uid://drslfgo3vq7iw" path="res://battle/battler/battlers/textures/greenman1.png" id="6_qpcvk"]
-[ext_resource type="Script" uid="uid://coum8josggix4" path="res://battle/battler/battler_controller.gd" id="7_tkkqt"]
-[ext_resource type="Resource" uid="uid://dw6yfa0vl8spt" path="res://battle/battler/battlers/opp_battler.tres" id="7_y7tyw"]
+[ext_resource type="Script" uid="uid://u616j31r0fvo" path="res://battle/BattleSimulator.cs" id="1_iorop"]
+[ext_resource type="Script" uid="uid://cvaq1obeq4oye" path="res://battle/BattleState.cs" id="2_hvjow"]
+[ext_resource type="Script" uid="uid://l8j1mj70vmcd" path="res://battle/battler/stats/Stat.cs" id="3_vlrs1"]
+[ext_resource type="Script" uid="uid://4ns5lqptba5u" path="res://battle/battler/Battler.cs" id="4_hvjow"]
+[ext_resource type="Script" uid="uid://bewlkg1vsqgig" path="res://battle/PlayerBattlerController.cs" id="4_j5u3w"]
+[ext_resource type="Script" uid="uid://cryo6wjlljyl" path="res://battle/battler/BattlerController.cs" id="7_tkkqt"]
 [ext_resource type="Theme" uid="uid://b6uu72pmk28gc" path="res://battle/ui/battlebox.theme" id="12_wtxou"]
-[ext_resource type="Script" uid="uid://bny132epygry0" path="res://battle/ui/battle_box.gd" id="13_8j1rm"]
+[ext_resource type="Script" uid="uid://djsii16smpeq5" path="res://battle/ui/BattleBox.cs" id="13_8j1rm"]
 [ext_resource type="PackedScene" uid="uid://bn351hwwdw8my" path="res://battle/battler/battler.tscn" id="13_on6y3"]
 [ext_resource type="PackedScene" uid="uid://ci5ba5t2a0o3h" path="res://battle/ui/hp_box_left.tscn" id="15_tkkqt"]
 [ext_resource type="PackedScene" uid="uid://dasiip6ol7036" path="res://battle/ui/hp_box_right.tscn" id="16_a56dj"]
@@ -223,9 +217,34 @@ _data = {
 &"intro": SubResource("Animation_tkkqt")
 }
 
-[sub_resource type="Resource" id="Resource_hq2s5"]
-script = ExtResource("2_f4huc")
-metadata/_custom_type_script = "uid://u6dj3ippnaog"
+[sub_resource type="Resource" id="Resource_qybyd"]
+script = ExtResource("2_hvjow")
+battlers = null
+metadata/_custom_type_script = "uid://cvaq1obeq4oye"
+
+[sub_resource type="Resource" id="Resource_hvjow"]
+script = ExtResource("3_vlrs1")
+base_value = 20.0
+
+[sub_resource type="Resource" id="Resource_eu6g2"]
+script = ExtResource("3_vlrs1")
+base_value = 0.125
+
+[sub_resource type="Resource" id="Resource_t8p1f"]
+script = ExtResource("3_vlrs1")
+base_value = 20.0
+
+[sub_resource type="Resource" id="Resource_rgsk0"]
+script = ExtResource("4_hvjow")
+name = "Purple Man"
+moves = Array[Object]([])
+metadata/_custom_type_script = "uid://4ns5lqptba5u"
+
+[sub_resource type="Resource" id="Resource_tkkqt"]
+script = ExtResource("4_hvjow")
+name = "Green Man"
+moves = null
+metadata/_custom_type_script = "uid://4ns5lqptba5u"
 
 [node name="Battle" type="Control"]
 layout_mode = 3
@@ -240,26 +259,22 @@ libraries = {
 &"": SubResource("AnimationLibrary_dxsh4")
 }
 
-[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "animation_player", "battle_box", "hp_boxes", "sprites")]
-script = ExtResource("1_4dkhb")
+[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "hp_boxes", "sprites")]
+script = ExtResource("1_iorop")
 autorun = true
-controllers = [NodePath("PlayerController"), NodePath("BattlerController")]
-battle = SubResource("Resource_hq2s5")
-type_chart = ExtResource("4_a56dj")
-animation_player = NodePath("../AnimationPlayer")
-battle_box = NodePath("../UIContainer/UI/BattleBox")
-hp_boxes = [NodePath("../UIContainer/UI/HPBoxLeft"), NodePath("../UIContainer/UI/HPBoxRight")]
-sprites = [NodePath("../OpponentBattlerContainer/OpponentBattlerSprite"), NodePath("../PlayerBattlerContainer/PlayerBattlerSprite")]
+controllers = []
+battle = SubResource("Resource_qybyd")
+hp_boxes = []
+sprites = []
+metadata/_custom_type_script = "uid://u616j31r0fvo"
 
 [node name="PlayerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("4_j5u3w")
-battler = ExtResource("5_qpcvk")
-metadata/_custom_type_script = "uid://cjbsv2yrt2727"
+battler = SubResource("Resource_rgsk0")
 
 [node name="BattlerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("7_tkkqt")
-battler = ExtResource("7_y7tyw")
-metadata/_custom_type_script = "uid://coum8josggix4"
+battler = SubResource("Resource_tkkqt")
 
 [node name="OpponentBattlerContainer" type="Control" parent="."]
 layout_mode = 1
@@ -274,9 +289,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="OpponentBattlerSprite" parent="OpponentBattlerContainer" instance=ExtResource("13_on6y3")]
 layout_mode = 0
-battler = ExtResource("7_y7tyw")
-primary_sprite = ExtResource("5_fnwgy")
-secondary_sprite = ExtResource("6_qpcvk")
+script = null
 
 [node name="PlayerBattlerContainer" type="Control" parent="."]
 layout_mode = 1
@@ -291,9 +304,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="PlayerBattlerSprite" parent="PlayerBattlerContainer" instance=ExtResource("13_on6y3")]
 layout_mode = 0
-battler = ExtResource("5_qpcvk")
-primary_sprite = ExtResource("3_bxywf")
-secondary_sprite = ExtResource("4_3e3lt")
+script = null
 
 [node name="UIContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -307,7 +318,7 @@ theme = ExtResource("12_wtxou")
 [node name="UI" type="Control" parent="UIContainer"]
 layout_mode = 2
 
-[node name="BattleBox" type="Control" parent="UIContainer/UI" node_paths=PackedStringArray("simulator", "dialog_container", "dialog_label", "choice_container", "moves_container")]
+[node name="BattleBox" type="Control" parent="UIContainer/UI"]
 layout_mode = 1
 anchor_top = 0.6419753
 anchor_right = 1.0
@@ -316,11 +327,6 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("12_wtxou")
 script = ExtResource("13_8j1rm")
-simulator = NodePath("../../../BattleSimulator")
-dialog_container = NodePath("Panel/HBoxContainer/DialogContainer")
-dialog_label = NodePath("Panel/HBoxContainer/DialogContainer/DialogLabel")
-choice_container = NodePath("Panel/HBoxContainer/ChoiceContainer")
-moves_container = NodePath("Panel/HBoxContainer/MovesContainer")
 
 [node name="Panel" type="Panel" parent="UIContainer/UI/BattleBox"]
 layout_mode = 1
@@ -382,14 +388,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
 
-[node name="HPBoxLeft" parent="UIContainer/UI" node_paths=PackedStringArray("controller") instance=ExtResource("15_tkkqt")]
+[node name="HPBoxLeft" parent="UIContainer/UI" instance=ExtResource("15_tkkqt")]
 layout_mode = 1
 anchor_top = 0.48538962
 anchor_bottom = 0.6165624
 grow_vertical = 1
-controller = NodePath("../../../BattleSimulator/PlayerController")
+script = null
 
-[node name="HPBoxRight" parent="UIContainer/UI" node_paths=PackedStringArray("controller") instance=ExtResource("16_a56dj")]
+[node name="HPBoxRight" parent="UIContainer/UI" instance=ExtResource("16_a56dj")]
 layout_mode = 1
 anchor_left = 0.71875
 anchor_top = -0.008116883
@@ -397,8 +403,6 @@ anchor_right = 1.0
 anchor_bottom = 0.12305594
 offset_right = -0.0007324219
 grow_vertical = 1
-controller = NodePath("../../../BattleSimulator/BattlerController")
+script = null
 
-[connection signal="move_selected" from="UIContainer/UI/BattleBox" to="BattleSimulator" method="_on_move_selected"]
-[connection signal="pressed" from="UIContainer/UI/BattleBox/Panel/HBoxContainer/ChoiceContainer/AttackButton" to="BattleSimulator" method="_on_attack_button_pressed"]
 [connection signal="pressed" from="UIContainer/UI/BattleBox/Panel/HBoxContainer/ChoiceContainer/AttackButton" to="UIContainer/UI/BattleBox" method="_on_attack_button_pressed"]
