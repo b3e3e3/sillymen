@@ -259,13 +259,10 @@ libraries = {
 &"": SubResource("AnimationLibrary_dxsh4")
 }
 
-[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "hp_boxes", "sprites")]
+[node name="BattleSimulator" type="Node" parent="."]
 script = ExtResource("1_iorop")
 autorun = true
-controllers = []
 battle = SubResource("Resource_qybyd")
-hp_boxes = []
-sprites = []
 metadata/_custom_type_script = "uid://u616j31r0fvo"
 
 [node name="PlayerController" type="Node" parent="BattleSimulator"]

@@ -26,7 +26,7 @@ public partial class BattleSimulator : Node
     [Export] public bool autorun = false;
 
     [ExportCategory("Components")]
-    [Export] public Array<BattlerController> controllers { get; set; } = [];
+    [Export] public Array<BattlerController> controllers = [];
     [Export] public required BattleState battle { get; set; }
     [Export] public TypeChart? type_chart;
 
@@ -34,8 +34,8 @@ public partial class BattleSimulator : Node
     [ExportCategory("UI")]
     [Export] public BattleBox? battle_box { get; set; }
     [Export] private AnimationPlayer? animation_player { get; set; }
-    [Export] private Array<HPBox> hp_boxes { get; set; } = [];
-    [Export] private Array<BattlerSprite> sprites { get; set; } = [];
+    [Export] private Array<HPBox> hp_boxes = [];
+    [Export] private Array<BattlerSprite> sprites = [];
 
     public required BattlerController player { get; set; }
     public int turn_count = 0;

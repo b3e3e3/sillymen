@@ -11,14 +11,11 @@ public partial class BattlerController : Node
     public Move current_move { get; set; } = null;
     public Array<StatusEffect> status_effects;
     public BattleSimulator simulator { get; protected set; }
-
-
-    public BattlerController(Battler default_battler = null)
+    
+    public BattlerController() {}
+    public BattlerController(Battler default_battler)
     {
-        if (default_battler != null)
-        {
-            battler = default_battler;
-        }
+        battler = default_battler;
     }
 
     public override void _Ready()
