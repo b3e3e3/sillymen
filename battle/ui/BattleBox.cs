@@ -49,7 +49,7 @@ public partial class BattleBox : Control
             button.Connect(Button.SignalName.Pressed, Callable.From(() =>
             {
                 OnMoveButtonPressed(move);
-            }), (uint)ConnectFlags.OneShot);
+            }));//, (uint)ConnectFlags.OneShot);
             Callable.From(() =>
             {
                 moves_container?.AddChild(button);

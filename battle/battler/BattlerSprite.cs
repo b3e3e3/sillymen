@@ -27,9 +27,10 @@ public partial class BattlerSprite : Control
 
     public override void _Ready()
     {
-        primary_sprite = battler?.primary_sprite;
-        secondary_sprite = battler?.secondary_sprite;
+        primary_sprite ??= battler?.primary_sprite;
+        secondary_sprite ??= battler?.secondary_sprite;
 
+        animation_player ??= GetNode<AnimationPlayer>("AnimationPlayer");
         // if (texture == null)...
 
         switch_primary_sprite();

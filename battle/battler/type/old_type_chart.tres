@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TypeChart" load_steps=2 format=3 uid="uid://b7ejaxai1j7nw"]
+[gd_resource type="Resource" script_class="TypeChart" load_steps=2 format=3 uid="uid://7lw7n1uwsqqc"]
 
 [ext_resource type="Script" uid="uid://fesltf1dhkkw" path="res://battle/battler/type/TypeChart.cs" id="1_wwy3b"]
 
