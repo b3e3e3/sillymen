@@ -11,13 +11,13 @@ public partial class StatusMoveResult : MoveResult
     private BattlerController? appliedTo;
 
     public override string? GetResultMessage() =>
-        appliedTo == null ? null : $"{appliedTo.Battler.Name} contracted {StatusEffect?.Name}!";
+        appliedTo is null ? null : $"{appliedTo.Battler.Name} contracted {StatusEffect?.Name}!";
 
     public override bool Apply(BattlerController controller, BattlerController target)
     {
         if (!CanApply())
             return false;
-        if (StatusEffect == null)
+        if (StatusEffect is null)
             return false;
 
         target.StatusEffects.Add((StatusEffect)StatusEffect.Duplicate());

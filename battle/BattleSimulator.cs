@@ -8,18 +8,9 @@ using Godot.Collections;
 
 namespace Sillymen;
 
-public record BattlerReference
-{
-    public required Battler Battler { get; init; }
-    public required BattlerController Controller { get; init; }
-    public BattlerSprite? Sprite { get; set; }
-    public HPBox? HpBox { get; set; }
-}
-
 [GlobalClass]
 public partial class BattleSimulator : Node
 {
-    // private const int maxStates = 100;
     private const float messageTime = 1.0f;
     private const string hitMissedMessage = "But it missed..!";
 
@@ -67,19 +58,13 @@ public partial class BattleSimulator : Node
     {
         TypeChart ??= GD.Load<TypeChart>("res://battle/battler/type/default_type_chart.tres");
 
+        // create references to quickly look up sprites battlers/sprites/hpboxes by controller
         foreach (var c in controllers)
         {
-            var r = new BattlerReference
-            {
-                Controller = c,
-                Battler = c.Battler,
-                Sprite = Sprites.ElementAtOrDefault(controllers.IndexOf(c)),
-                HpBox = HpBoxes.ElementAtOrDefault(controllers.IndexOf(c)),
-            };
+            RegisterControllerReference(c);
 
-            References.Add(r);
-
-            if (c.GetType() == typeof(PlayerBattlerController) || c == controllers[0])
+            // register a player
+            if (c is PlayerBattlerController || c == controllers[0])
             {
                 Player = c;
             }
@@ -95,7 +80,7 @@ public partial class BattleSimulator : Node
 
         BattleBox?.ShowMessage($"{Battle.Battlers[1].Name} appeared!");
 
-        if (AnimationPlayer != null)
+        if (AnimationPlayer is not null)
         {
             AnimationPlayer.Play("intro");
             await ToSignal(AnimationPlayer, AnimationPlayer.SignalName.AnimationFinished);
@@ -103,9 +88,20 @@ public partial class BattleSimulator : Node
         }
 
         if (autorun)
-        {
             await RunSimulation();
-        }
+    }
+
+    private void RegisterControllerReference(BattlerController c)
+    {
+        var r = new BattlerReference
+        {
+            Controller = c,
+            Battler = c.Battler,
+            Sprite = Sprites.ElementAtOrDefault(controllers.IndexOf(c)), // TODO: dont rely on array order? maybe tie these objects together more explicitly
+            HpBox = HpBoxes.ElementAtOrDefault(controllers.IndexOf(c)),
+        };
+
+        References.Add(r);
     }
 
     public bool IsPlayerTurn() => Battle.ActiveBattler == Player.Battler;
@@ -120,11 +116,12 @@ public partial class BattleSimulator : Node
         GD.Print(Enum.GetName(Battle.Phase));
         GD.Print(Enum.GetName(BattleBox!.screen));
 
-        if (BattleBox != null)
+        if (BattleBox is not null)
         {
             BattleBox.Update(Battle.Phase);
-            string? message = BattleBox.GetMessage(Battle);
-            if (message != null)
+
+            var message = BattleBox.GetMessage(Battle);
+            if (message is not null)
             {
                 GD.Print($"{TurnCount + 1}. {message}");
                 BattleBox.ShowMessage(message);
@@ -133,6 +130,7 @@ public partial class BattleSimulator : Node
 
         var controller = GetControllerFor(Battle.ActiveBattler);
         var sprite = GetSpriteFor(Battle.ActiveBattler);
+        var hpBox = GetHpBoxFor(Battle.ActiveBattler);
 
         switch (Battle.Phase)
         {
@@ -143,7 +141,7 @@ public partial class BattleSimulator : Node
                 controller?.CurrentMove = await controller.ChooseMove();
                 break;
             case BattleState.BattlePhase.Move:
-                if (controller == null)
+                if (controller is null)
                     break;
                 foreach (var e in controller.StatusEffects.Duplicate())
                 {
@@ -156,7 +154,7 @@ public partial class BattleSimulator : Node
                     }
                 }
 
-                if (sprite != null)
+                if (sprite is not null)
                 {
                     await sprite.PlayAnimation(controller.CurrentMove.GetAnimation()); // TODO: missed move
                 }
@@ -169,7 +167,7 @@ public partial class BattleSimulator : Node
                 }
                 break;
             case BattleState.BattlePhase.PostMove:
-                if (controller == null)
+                if (controller is null)
                     break;
                 foreach (var e in controller.StatusEffects.Duplicate())
                 {
@@ -192,11 +190,11 @@ public partial class BattleSimulator : Node
 
     public void UpdateBattleBox()
     {
-        if (BattleBox == null)
+        if (BattleBox is null)
             return;
 
         var message = BattleBox.GetMessage(Battle);
-        if (message == null)
+        if (message is null)
             return;
 
         BattleBox.ShowMessage(message);
@@ -204,7 +202,7 @@ public partial class BattleSimulator : Node
 
     public async Task ShowMessage(string text, float duration = messageTime)
     {
-        if (BattleBox == null)
+        if (BattleBox is null)
             return;
 
         BattleBox.ShowMessage(text);
@@ -229,11 +227,15 @@ public partial class BattleSimulator : Node
         }
     }
 
-    public BattlerController? GetControllerFor(Battler? battler) =>
-        battler == null ? null : References.FirstOrDefault(r => r.Battler == battler)?.Controller;
+    public BattlerReference? GetReferenceFor(Battler? battler) =>
+        battler is null ? null : References.FirstOrDefault(r => r.Battler == battler);
 
-    private BattlerSprite? GetSpriteFor(Battler? battler) =>
-        battler == null ? null : References.FirstOrDefault(r => r.Battler == battler)?.Sprite;
+    public BattlerController? GetControllerFor(Battler? battler) =>
+        GetReferenceFor(battler)?.Controller;
+
+    private BattlerSprite? GetSpriteFor(Battler? battler) => GetReferenceFor(battler)?.Sprite;
+
+    private HPBox? GetHpBoxFor(Battler? battler) => GetReferenceFor(battler)?.HpBox;
 
     private void RefreshHpboxes()
     {
@@ -281,21 +283,28 @@ public partial class BattleSimulator : Node
                 break;
 
             hits++;
-            RefreshHpboxes();
 
             var spr = GetSpriteFor(action.Target.Battler);
-            if (spr != null && action.Result.HasAnimation())
+            if (spr is not null && action.Result.HasAnimation())
             {
                 await spr.PlayAnimation(action.Result.GetAnimation());
             }
 
+            RefreshHpboxes();
+
+            var hpBox = GetHpBoxFor(action.Target.Battler);
+            if (hpBox is not null && !hpBox.IsStable())
+            {
+                await ToSignal(hpBox, HPBox.SignalName.HpChangeFinished);
+            }
+
             var hitMessage = action.Result.GetHitMessage();
-            if (hitMessage != null)
+            if (hitMessage is not null)
                 await ShowMessage(hitMessage);
         }
 
         var resultMessage = action.Result.GetResultMessage();
-        if (resultMessage == null)
+        if (resultMessage is null)
             return;
         await ShowMessage(hits > 0 ? resultMessage : hitMissedMessage);
     }

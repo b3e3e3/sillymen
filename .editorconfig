@@ -122,3 +122,6 @@ dotnet_naming_rule.private_fields_notunderscored.symbols = private_fields
 dotnet_naming_rule.private_fields_notunderscored.style = notunderscored
 dotnet_naming_rule.private_fields_notunderscored.severity = warning
 # End of No underscore prefix on private fields
+
+# CS4014: Because this call is not awaited, execution of the current method continues before the call is completed
+dotnet_diagnostic.CS4014.severity = silent

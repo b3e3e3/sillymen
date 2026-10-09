@@ -70,7 +70,7 @@ public partial class BattleBox : Control
     public void ShowMessage(string text)
     {
         message = text;
-        if (Simulator != null)
+        if (Simulator is not null)
             Update(Simulator.Battle.Phase);
     }
 
@@ -149,7 +149,7 @@ public partial class BattleBox : Control
 
     private void OnAttackButtonPressed()
     {
-        if (Simulator == null)
+        if (Simulator is null)
             return;
 
         BuildMoveChoices(Simulator.Player.Battler);

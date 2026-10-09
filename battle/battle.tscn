@@ -277,7 +277,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 columns = 2
 
-[node name="HPBoxLeft" parent="UIContainer/UI" node_paths=PackedStringArray("controller") instance=ExtResource("15_tkkqt")]
+[node name="HPBoxLeft" parent="UIContainer/UI" node_paths=PackedStringArray("Controller") instance=ExtResource("15_tkkqt")]
 layout_mode = 0
 anchors_preset = 0
 anchor_top = 0.48538962
@@ -286,9 +286,9 @@ anchor_bottom = 0.6165624
 offset_right = 315.0
 offset_bottom = 0.19754028
 grow_vertical = 1
-controller = NodePath("../../../BattleSimulator/PlayerController")
+Controller = NodePath("../../../BattleSimulator/PlayerController")
 
-[node name="HPBoxRight" parent="UIContainer/UI" node_paths=PackedStringArray("controller") instance=ExtResource("16_a56dj")]
+[node name="HPBoxRight" parent="UIContainer/UI" node_paths=PackedStringArray("Controller") instance=ExtResource("16_a56dj")]
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.71875
@@ -298,6 +298,6 @@ anchor_bottom = 0.12305594
 offset_right = 0.0007324219
 offset_bottom = 0.19754028
 grow_vertical = 1
-controller = NodePath("../../../BattleSimulator/BattlerController")
+Controller = NodePath("../../../BattleSimulator/BattlerController")
 
 [connection signal="pressed" from="UIContainer/UI/BattleBox/Panel/HBoxContainer/ChoiceContainer/AttackButton" to="UIContainer/UI/BattleBox" method="OnAttackButtonPressed"]

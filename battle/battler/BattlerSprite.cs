@@ -23,7 +23,7 @@ public partial class BattlerSprite : Control
     {
         Texture = GetNode<TextureRect>("BattlerTexture");
         AnimationPlayer ??= GetNode<AnimationPlayer>("AnimationPlayer");
-        // if (texture == null)...
+        // if (texture is null)...
 
         SwitchPrimarySprite();
     }
@@ -32,7 +32,7 @@ public partial class BattlerSprite : Control
 
     public async Task PlayAnimation(StringName anim)
     {
-        if (AnimationPlayer == null)
+        if (AnimationPlayer is null)
             return;
         if (!AnimationPlayer.HasAnimation(anim))
         {
@@ -45,6 +45,7 @@ public partial class BattlerSprite : Control
         AnimationPlayer.Play("RESET");
         await ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
 
+        GD.Print("Done playing anim 2");
         // # WIP: hit frames, but theyre currently unused. works tho
         // #var resolved := [false] # HACK: array so lambda captures
         // #var on_hit := func():
