@@ -1,6 +1,5 @@
 using System.Linq;
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -17,7 +16,7 @@ public partial class Move : Resource
     public StringName AnimationName { get; set; }
 
     [Export]
-    public Array<MoveResult> Results
+    public Godot.Collections.Array<MoveResult> Results
     {
         get => [.. (from r in field select (r.Duplicate())).OfType<MoveResult>()];
         set;

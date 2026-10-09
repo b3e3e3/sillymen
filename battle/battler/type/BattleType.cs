@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -19,5 +18,5 @@ public partial class BattleType : Resource
     public TypeKind Type { get; set; }
 
     [Export]
-    public Dictionary<TypeKind, float> Effectiveness { get; set; } = [];
+    public Godot.Collections.Dictionary<TypeKind, float> Effectiveness { get; set; } = [];
 }

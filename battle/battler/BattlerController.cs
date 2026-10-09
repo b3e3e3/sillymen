@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -10,7 +9,7 @@ public partial class BattlerController : Node
     [Export]
     public Battler Battler { get; set; }
     public Move CurrentMove { get; set; } = null;
-    public Array<StatusEffect> StatusEffects { get; set; } = [];
+    public Godot.Collections.Array<StatusEffect> StatusEffects { get; set; } = [];
     public BattleSimulator Simulator { get; protected set; }
 
     public BattlerController() { }

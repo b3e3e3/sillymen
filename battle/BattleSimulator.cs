@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -19,7 +18,7 @@ public partial class BattleSimulator : Node
 
     [ExportCategory("Components")]
     [Export]
-    public Array<BattlerController> controllers = [];
+    public Godot.Collections.Array<BattlerController> controllers = [];
 
     [Export]
     public required BattleState Battle { get; set; }
@@ -36,10 +35,10 @@ public partial class BattleSimulator : Node
     private AnimationPlayer? AnimationPlayer { get; set; }
 
     [Export]
-    private Array<HPBox> HpBoxes { get; set; } = [];
+    private Godot.Collections.Array<HPBox> HpBoxes { get; set; } = [];
 
     [Export]
-    private Array<BattlerSprite> Sprites { get; set; } = [];
+    private Godot.Collections.Array<BattlerSprite> Sprites { get; set; } = [];
 
     public required BattlerController Player { get; set; }
     public int TurnCount { get; set; } = 0;
@@ -57,11 +56,54 @@ public partial class BattleSimulator : Node
     public override async void _Ready()
     {
         TypeChart ??= GD.Load<TypeChart>("res://battle/battler/type/default_type_chart.tres");
+        RegisterControllers();
 
-        // create references to quickly look up sprites battlers/sprites/hpboxes by controller
+        Battle.TurnCompleted += OnTurnCompleted;
+        
+        await PlayIntro();
+
+        if (autorun)
+            await RunSimulation();
+    }
+
+    public override void _ExitTree()
+    {
+        Battle.TurnCompleted -= OnTurnCompleted;
+    }
+
+    public void OnTurnCompleted()
+    {
+        TurnCount++;
+    }
+
+    private async Task PlayIntro()
+    {
+        var introAnim = new StringName("intro");
+        var resetAnim = new StringName("RESET");
+        
+        BattleBox?.ShowMessage($"{Battle.Battlers[1].Name} appeared!"); // TODO: fragile
+
+        if (AnimationPlayer is null) return;
+
+        AnimationPlayer.Play(introAnim);
+        await ToSignal(AnimationPlayer, AnimationPlayer.SignalName.AnimationFinished);
+        AnimationPlayer.Play(resetAnim);
+    }
+
+    private void RegisterControllers()
+    {
         foreach (var c in controllers)
         {
-            RegisterControllerReference(c);
+            // create references to quickly look up sprites battlers/sprites/hpboxes by controller
+            var r = new BattlerReference
+            {
+                Controller = c,
+                Battler = c.Battler,
+                Sprite = Sprites.ElementAtOrDefault(controllers.IndexOf(c)), // TODO: dont rely on array order? maybe tie these objects together more explicitly
+                HpBox = HpBoxes.ElementAtOrDefault(controllers.IndexOf(c)),
+            };
+
+            References.Add(r);
 
             // register a player
             if (c is PlayerBattlerController || c == controllers[0])
@@ -69,135 +111,112 @@ public partial class BattleSimulator : Node
                 Player = c;
             }
 
-            if (Battle.Battlers.Contains(c.Battler) == false)
+            if (!Battle.Battlers.Contains(c.Battler))
             {
                 Battle.Battlers.Add(c.Battler);
                 GD.Print($"Registered battler {c.Battler.Name}!");
             }
         }
-
-        Battle.TurnCompleted += () => TurnCount++;
-
-        BattleBox?.ShowMessage($"{Battle.Battlers[1].Name} appeared!");
-
-        if (AnimationPlayer is not null)
-        {
-            AnimationPlayer.Play("intro");
-            await ToSignal(AnimationPlayer, AnimationPlayer.SignalName.AnimationFinished);
-            AnimationPlayer.Play("RESET");
-        }
-
-        if (autorun)
-            await RunSimulation();
-    }
-
-    private void RegisterControllerReference(BattlerController c)
-    {
-        var r = new BattlerReference
-        {
-            Controller = c,
-            Battler = c.Battler,
-            Sprite = Sprites.ElementAtOrDefault(controllers.IndexOf(c)), // TODO: dont rely on array order? maybe tie these objects together more explicitly
-            HpBox = HpBoxes.ElementAtOrDefault(controllers.IndexOf(c)),
-        };
-
-        References.Add(r);
     }
 
     public bool IsPlayerTurn() => Battle.ActiveBattler == Player.Battler;
 
     public async Task Step()
     {
-        // LogCurrentState();
-
         Battle.ProcessState();
-
-        GD.Print("We step");
-        GD.Print(Enum.GetName(Battle.Phase));
-        GD.Print(Enum.GetName(BattleBox!.screen));
-
-        if (BattleBox is not null)
-        {
-            BattleBox.Update(Battle.Phase);
-
-            var message = BattleBox.GetMessage(Battle);
-            if (message is not null)
-            {
-                GD.Print($"{TurnCount + 1}. {message}");
-                BattleBox.ShowMessage(message);
-            }
-        }
+        UpdateBattleBox();
 
         var controller = GetControllerFor(Battle.ActiveBattler);
-        var sprite = GetSpriteFor(Battle.ActiveBattler);
-        var hpBox = GetHpBoxFor(Battle.ActiveBattler);
 
         switch (Battle.Phase)
         {
-            default:
             case BattleState.BattlePhase.Start:
                 break;
             case BattleState.BattlePhase.Choice:
-                controller?.CurrentMove = await controller.ChooseMove();
+                await StepChoice(controller);
                 break;
             case BattleState.BattlePhase.Move:
-                if (controller is null)
-                    break;
-                foreach (var e in controller.StatusEffects.Duplicate())
-                {
-                    GD.Print($"{e.Name} has expired? {e.HasExpired()} ({e.count}/{e.MaxTurns})");
-                    if (e.HasExpired())
-                    {
-                        controller.RemoveStatusEffect(e);
-                        await ShowMessage($"{controller.Battler.Name} no longer has {e.Name}!");
-                        continue;
-                    }
-                }
-
-                if (sprite is not null)
-                {
-                    await sprite.PlayAnimation(controller.CurrentMove.GetAnimation()); // TODO: missed move
-                }
-
-                foreach (var action in ResolveMove(controller))
-                {
-                    if (action.Target.Battler.IsFainted() && action.Target != action.User)
-                        break;
-                    await PresentAction(action);
-                }
+                await StepMove(controller);
                 break;
             case BattleState.BattlePhase.PostMove:
-                if (controller is null)
-                    break;
-                foreach (var e in controller.StatusEffects.Duplicate())
-                {
-                    await PresentAction(new PlannedAction(e, controller, controller)); // TODO: what??
-                }
+                await StepPostMove(controller);
                 break;
             case BattleState.BattlePhase.End:
-                await ShowMessage("Battle over.");
-                var livingBattlers = Battle.GetLivingBattlers();
-
-                if (livingBattlers.Count == 0)
-                    await ShowMessage("It was a draw!");
-                else if (livingBattlers.Contains(Player.Battler))
-                    await ShowMessage("You win!");
-                else
-                    await ShowMessage("You lost...");
+                await StepEnd();
+                break;
+            default:
                 break;
         }
     }
 
-    public void UpdateBattleBox()
+    private void UpdateBattleBox()
     {
-        if (BattleBox is null)
-            return;
+        if (BattleBox is null) return;
 
+        BattleBox.Update(Battle.Phase);
         var message = BattleBox.GetMessage(Battle);
-        if (message is null)
-            return;
 
+        if (message is null) return;
+
+        GD.Print($"{TurnCount + 1}. {message}");
         BattleBox.ShowMessage(message);
+    }
+
+    private async Task StepEnd()
+    {
+        await ShowMessage("Battle over.");
+        var livingBattlers = Battle.GetLivingBattlers();
+
+        if (livingBattlers.Count == 0)
+            await ShowMessage("It was a draw!");
+        else if (livingBattlers.Contains(Player.Battler))
+            await ShowMessage("You win!");
+        else
+            await ShowMessage("You lost...");
+    }
+
+    private async Task StepPostMove(BattlerController? controller)
+    {
+        if (controller is null)
+            return;
+        foreach (var e in controller.StatusEffects.Duplicate())
+        {
+            await PresentAction(new PlannedAction(e, controller, controller)); // TODO: what??
+        }
+    }
+
+    private async Task StepMove(BattlerController? controller)
+    {
+        var sprite = GetSpriteFor(Battle.ActiveBattler);
+        if (controller is null)
+            return;
+        foreach (var e in controller.StatusEffects.Duplicate())
+        {
+            GD.Print($"{e.Name} has expired? {e.HasExpired()} ({e.count}/{e.MaxTurns})");
+            if (e.HasExpired())
+            {
+                controller.RemoveStatusEffect(e);
+                await ShowMessage($"{controller.Battler.Name} no longer has {e.Name}!");
+                continue;
+            }
+        }
+
+        if (sprite is not null)
+        {
+            await sprite.PlayAnimation(controller.CurrentMove.GetAnimation()); // TODO: missed move
+        }
+
+        foreach (var action in ResolveMove(controller))
+        {
+            if (action.Target.Battler.IsFainted() && action.Target != action.User)
+                break;
+            await PresentAction(action);
+        }
+    }
+
+    private static async Task StepChoice(BattlerController? controller)
+    {
+        controller?.CurrentMove = await controller.ChooseMove();
     }
 
     public async Task ShowMessage(string text, float duration = messageTime)
@@ -223,7 +242,6 @@ public partial class BattleSimulator : Node
         catch (Exception e)
         {
             GD.PushError(e.ToString());
-            throw;
         }
     }
 
