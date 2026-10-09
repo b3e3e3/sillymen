@@ -171,8 +171,9 @@ offset_right = 577.0
 metadata/_edit_group_ = true
 metadata/_edit_use_anchors_ = true
 
-[node name="PlayerBattlerSprite" parent="PlayerBattlerContainer" instance=ExtResource("13_on6y3")]
+[node name="PlayerBattlerSprite" parent="PlayerBattlerContainer" node_paths=PackedStringArray("Controller") instance=ExtResource("13_on6y3")]
 layout_mode = 0
+Controller = NodePath("../../BattleSimulator/PlayerController")
 
 [node name="OpponentBattlerContainer" type="Control" parent="."]
 layout_mode = 1
@@ -185,8 +186,9 @@ offset_right = 13.0
 metadata/_edit_group_ = true
 metadata/_edit_use_anchors_ = true
 
-[node name="OpponentBattlerSprite" parent="OpponentBattlerContainer" instance=ExtResource("13_on6y3")]
+[node name="OpponentBattlerSprite" parent="OpponentBattlerContainer" node_paths=PackedStringArray("Controller") instance=ExtResource("13_on6y3")]
 layout_mode = 0
+Controller = NodePath("../../BattleSimulator/BattlerController")
 
 [node name="UIContainer" type="MarginContainer" parent="."]
 layout_mode = 1

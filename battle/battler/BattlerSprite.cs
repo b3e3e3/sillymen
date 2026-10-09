@@ -11,30 +11,17 @@ public partial class BattlerSprite : Control
     public delegate void HitFrameEventHandler();
 
     [Export]
-    public Battler? Battler { get; set; }
+    public BattlerController? Controller { get; set; }
 
-    [ExportCategory("Sprites")]
-    [Export]
-    public Texture2D? PrimarySprite { get; set; }
-
-    [Export]
-    public Texture2D? SecondarySprite { get; set; }
+    public Texture2D? PrimarySprite => Controller?.Battler.PrimarySprite;
+    public Texture2D? SecondarySprite => Controller?.Battler.SecondarySprite;
 
     public TextureRect? Texture { get; set; }
     public AnimationPlayer? AnimationPlayer { get; set; }
 
-    public BattlerSprite() { }
-
-    public BattlerSprite(Battler battler)
-    {
-        Battler = battler;
-    }
-
     public override void _Ready()
     {
-        PrimarySprite = Battler?.PrimarySprite; // used to be ??=
-        SecondarySprite = Battler?.SecondarySprite; // used to be ??=
-
+        Texture = GetNode<TextureRect>("BattlerTexture");
         AnimationPlayer ??= GetNode<AnimationPlayer>("AnimationPlayer");
         // if (texture == null)...
 
