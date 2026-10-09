@@ -7,33 +7,38 @@ namespace Sillymen;
 [GlobalClass]
 public partial class BattleBox : Control
 {
-    public enum Screen
+    public enum ScreenType
     {
-        NORMAL,
-        MOVE_CHOICE,
+        Normal,
+        MoveChoice,
     }
 
     [Signal]
     public delegate void MoveSelectedEventHandler(Move move);
 
     [Export]
-    public BattleSimulator? simulator;
+    public BattleSimulator? Simulator { get; set; }
+
     [Export]
-    private Control? dialog_container;
+    private Control? DialogContainer { get; set; }
+
     [Export]
-    private RichTextLabel? dialog_label;
+    private RichTextLabel? DialogLabel { get; set; }
+
     [Export]
-    private Control? choice_container;
+    private Control? ChoiceContainer { get; set; }
+
     [Export]
-    private Control? moves_container;
+    private Control? MovesContainer { get; set; }
 
     private string message = "";
-    public Screen screen = Screen.NORMAL;
+    public ScreenType screen = ScreenType.Normal;
 
-    private void build_move_choices(Battler battler)
+    private void BuildMoveChoices(Battler battler)
     {
-        var children = moves_container?.GetChildren() ?? [];
-        if (children.Count > 0) return; // TODO: if moves need to change during battle, dont do this
+        var children = MovesContainer?.GetChildren() ?? [];
+        if (children.Count > 0)
+            return; // TODO: if moves need to change during battle, dont do this
 
         var scene = GD.Load<PackedScene>("res://battle/ui/move_button.tscn");
 
@@ -42,94 +47,113 @@ public partial class BattleBox : Control
         //     c.QueueFree();
         // }
 
-        foreach (var move in battler.moves)
+        foreach (var move in battler.Moves)
         {
             var button = scene.Instantiate<Button>();
-            button.Text = move.name;
-            button.Connect(Button.SignalName.Pressed, Callable.From(() =>
-            {
-                OnMoveButtonPressed(move);
-            }));//, (uint)ConnectFlags.OneShot);
-            Callable.From(() =>
-            {
-                moves_container?.AddChild(button);
-            }).CallDeferred();
+            button.Text = move.Name;
+            button.Connect(
+                Button.SignalName.Pressed,
+                Callable.From(() =>
+                {
+                    OnMoveButtonPressed(move);
+                })
+            ); //, (uint)ConnectFlags.OneShot);
+            Callable
+                .From(() =>
+                {
+                    MovesContainer?.AddChild(button);
+                })
+                .CallDeferred();
         }
     }
 
-    public void show_message(string text)
+    public void ShowMessage(string text)
     {
         message = text;
-        if (simulator != null) update(simulator.battle.phase);
+        if (Simulator != null)
+            Update(Simulator.Battle.Phase);
     }
 
-    public string? get_message(BattleState state)
+    public string? GetMessage(BattleState state)
     {
-        switch (state.phase)
+        switch (state.Phase)
         {
-            case BattleState.Phase.CHOICE:
-                if (simulator?.is_player_turn() == true)
+            case BattleState.BattlePhase.Choice:
+                if (Simulator?.IsPlayerTurn() == true)
                 {
-                    return $"What will {state.active_battler?.name} do?";
+                    return $"What will {state.ActiveBattler?.Name} do?";
                 }
                 break;
-            case BattleState.Phase.MOVE:
-                GD.Print($"{state.active_battler?.name} is about to use a move!");
+            case BattleState.BattlePhase.Move:
+                GD.Print($"{state.ActiveBattler?.Name} is about to use a move!");
 
-                var controller = simulator?.get_controller_for(state.active_battler);
-                return $"{state.active_battler?.name} used {controller?.current_move.name}!";
-            // case BattleState.Phase.POST_MOVE:
+                var controller = Simulator?.GetControllerFor(state.ActiveBattler);
+                return $"{state.ActiveBattler?.Name} used {controller?.CurrentMove.Name}!";
+            case BattleState.BattlePhase.Start:
+                break;
+            case BattleState.BattlePhase.PostMove:
+                break;
+            case BattleState.BattlePhase.End:
+                break;
+            default:
+                break;
         }
 
         return null;
     }
 
-    public void update(BattleState.Phase phase)
+    public void Update(BattleState.BattlePhase phase)
     {
-        dialog_label?.Text = message; // get_message(state);
+        DialogLabel?.Text = message; // GetMessage(state);
 
         switch (phase)
         {
-            case BattleState.Phase.CHOICE:
-                if (screen == Screen.NORMAL)
+            case BattleState.BattlePhase.Choice:
+                if (screen == ScreenType.Normal)
                 {
-                    dialog_container?.Visible = true;
-                    choice_container?.Visible = simulator?.is_player_turn() == true;
-                    moves_container?.Visible = false;
+                    DialogContainer?.Visible = true;
+                    ChoiceContainer?.Visible = Simulator?.IsPlayerTurn() == true;
+                    MovesContainer?.Visible = false;
                 }
-                else if (screen == Screen.MOVE_CHOICE)
+                else if (screen == ScreenType.MoveChoice)
                 {
-                    dialog_container?.Visible = false;
-                    choice_container?.Visible = false;
-                    moves_container?.Visible = true;
+                    DialogContainer?.Visible = false;
+                    ChoiceContainer?.Visible = false;
+                    MovesContainer?.Visible = true;
                 }
                 break;
-            case BattleState.Phase.MOVE:
-            case BattleState.Phase.POST_MOVE:
-                dialog_container?.Visible = true;
-                choice_container?.Visible = false;
-                moves_container?.Visible = false;
+            case BattleState.BattlePhase.Move:
+            case BattleState.BattlePhase.PostMove:
+                DialogContainer?.Visible = true;
+                ChoiceContainer?.Visible = false;
+                MovesContainer?.Visible = false;
                 break;
+            case BattleState.BattlePhase.Start:
+                break;
+            case BattleState.BattlePhase.End:
+                break;
+
             default:
-                dialog_container?.Visible = true;
-                choice_container?.Visible = false;
-                moves_container?.Visible = false;
+                DialogContainer?.Visible = true;
+                ChoiceContainer?.Visible = false;
+                MovesContainer?.Visible = false;
                 break;
         }
     }
 
     private void OnMoveButtonPressed(Move move)
     {
-        screen = Screen.NORMAL;
+        screen = ScreenType.Normal;
         EmitSignal(SignalName.MoveSelected, move);
     }
 
     private void OnAttackButtonPressed()
     {
-        if (simulator == null) return;
+        if (Simulator == null)
+            return;
 
-        build_move_choices(simulator.player.battler);
-        screen = Screen.MOVE_CHOICE;
-        update(simulator.battle.phase);
+        BuildMoveChoices(Simulator.Player.Battler);
+        screen = ScreenType.MoveChoice;
+        Update(Simulator.Battle.Phase);
     }
 }

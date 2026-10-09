@@ -7,24 +7,20 @@ namespace Sillymen;
 public partial class StatusMoveResult : MoveResult
 {
     [Export]
-    public StatusEffect? status_effect;
+    public StatusEffect? StatusEffect { get; set; }
     private BattlerController? appliedTo;
 
-    public override string? get_result_message()
-    {
-        if (appliedTo == null)
-            return null;
-        return $"{appliedTo.battler.name} contracted {status_effect?.name}!";
-    }
+    public override string? GetResultMessage() =>
+        appliedTo == null ? null : $"{appliedTo.Battler.Name} contracted {StatusEffect?.Name}!";
 
-    public override bool apply(BattlerController controller, BattlerController target)
+    public override bool Apply(BattlerController controller, BattlerController target)
     {
-        if (!can_apply())
+        if (!CanApply())
             return false;
-        if (status_effect == null)
+        if (StatusEffect == null)
             return false;
 
-        target.status_effects.Add((StatusEffect)status_effect.Duplicate());
+        target.StatusEffects.Add((StatusEffect)StatusEffect.Duplicate());
         appliedTo = target;
 
         return true;

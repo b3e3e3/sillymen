@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_wwy3b")
-types = Array[Object]([])
+Types = null
 metadata/_custom_type_script = "uid://fesltf1dhkkw"

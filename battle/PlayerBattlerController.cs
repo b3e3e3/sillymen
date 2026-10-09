@@ -6,8 +6,9 @@ namespace Sillymen;
 [GlobalClass]
 public partial class PlayerBattlerController : BattlerController
 {
-    public override async Task<Move> choose_move(/*BattleState state*/)
+    public override async Task<Move> ChooseMove( /*BattleState state*/
+    )
     {
-        return await simulator.battle_box.ToSignal<Move>(BattleBox.SignalName.MoveSelected);
+        return await Simulator.BattleBox.ToSignal<Move>(BattleBox.SignalName.MoveSelected);
     }
 }

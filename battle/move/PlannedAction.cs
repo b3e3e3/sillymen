@@ -10,5 +10,5 @@ public readonly partial struct PlannedAction(
     public BattlerController User { get; init; } = User;
     public BattlerController Target { get; init; } = Target;
 
-    public bool ApplyMoveResult() => Result.apply(User, Target);
+    public bool ApplyMoveResult() => Result.Apply(User, Target);
 }

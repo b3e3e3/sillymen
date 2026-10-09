@@ -15,67 +15,67 @@
 
 [sub_resource type="Resource" id="Resource_28wrj"]
 script = ExtResource("1_28wrj")
-base_value = 84.0
+BaseValue = 84.0
 metadata/_custom_type_script = "uid://did50bnewld6y"
 
 [sub_resource type="Resource" id="Resource_xjw84"]
 script = ExtResource("1_28wrj")
-base_value = 43.0
+BaseValue = 43.0
 metadata/_custom_type_script = "uid://did50bnewld6y"
 
 [sub_resource type="Resource" id="Resource_qbeoq"]
 script = ExtResource("5_pbicj")
-power = 20
-max_hits = 3
-_animation_name = &"damage"
+Power = 20
+MaxHits = 3
+AnimationName = &"damage"
 metadata/_custom_type_script = "uid://dv8e26se7fpvx"
 
 [sub_resource type="Resource" id="Resource_no6dl"]
 script = ExtResource("7_no6dl")
-_animation_name = &"boost"
-chance = 0.5
-target_type = 0
+AnimationName = &"boost"
+Chance = 0.5
 metadata/_custom_type_script = "uid://bxgekd8sqsc0l"
 
 [sub_resource type="Resource" id="Resource_s2wqd"]
 script = ExtResource("1_orhjr")
-name = "Insane Moment"
-type = 1
-_animation_name = &"assmove"
-results = Array[ExtResource("4_qbeoq")]([SubResource("Resource_qbeoq"), SubResource("Resource_no6dl")])
+Name = "Insane Moment"
+Type = 1
+AnimationName = &"assmove"
+Results = Array[ExtResource("4_qbeoq")]([SubResource("Resource_qbeoq"), SubResource("Resource_no6dl")])
 metadata/_custom_type_script = "uid://bgkl88cjh18f6"
 
 [sub_resource type="Resource" id="Resource_lvg7q"]
 script = ExtResource("8_p1hyd")
-name = "Poison"
-_animation_name = &"poison"
+Name = "Poison"
+MaxTurns = 3
+AnimationName = &"poison"
 metadata/_custom_type_script = "uid://dub2o50m8hgwn"
 
 [sub_resource type="Resource" id="Resource_red83"]
 script = ExtResource("7_p1hyd")
-status_effect = SubResource("Resource_lvg7q")
-_animation_name = &"poison"
+StatusEffect = SubResource("Resource_lvg7q")
+AnimationName = &"poison"
 metadata/_custom_type_script = "uid://dwatt7c3yn0i6"
 
 [sub_resource type="Resource" id="Resource_hkqdy"]
 script = ExtResource("1_orhjr")
-name = "Poy Shawn"
-_animation_name = &"funnyblast"
-results = Array[ExtResource("4_qbeoq")]([SubResource("Resource_red83")])
+Name = "Poy Shawn"
+AnimationName = &"funnyblast"
+Results = Array[ExtResource("4_qbeoq")]([SubResource("Resource_red83")])
 metadata/_custom_type_script = "uid://bgkl88cjh18f6"
 
 [sub_resource type="Resource" id="Resource_auqr8"]
 script = ExtResource("1_28wrj")
-base_value = 65.0
+BaseValue = 65.0
 
 [resource]
 script = ExtResource("5_dqlhm")
-name = "Purple Man"
-level = 50
-primary_type = 3
-primary_sprite = ExtResource("4_y2toi")
-secondary_sprite = ExtResource("6_ler4l")
-moves = Array[ExtResource("1_orhjr")]([ExtResource("2_wrd01"), ExtResource("3_28e3e"), SubResource("Resource_s2wqd"), SubResource("Resource_hkqdy")])
-attack = SubResource("Resource_28wrj")
-defense = SubResource("Resource_xjw84")
-speed = SubResource("Resource_auqr8")
+Name = "Purple Man"
+Level = 50
+PrimaryType = 3
+PrimarySprite = ExtResource("4_y2toi")
+SecondarySprite = ExtResource("6_ler4l")
+Moves = Array[ExtResource("1_orhjr")]([ExtResource("2_wrd01"), ExtResource("3_28e3e"), SubResource("Resource_s2wqd"), SubResource("Resource_hkqdy")])
+Attack = SubResource("Resource_28wrj")
+Defense = SubResource("Resource_xjw84")
+Speed = SubResource("Resource_auqr8")

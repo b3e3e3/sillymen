@@ -5,10 +5,11 @@ namespace Sillymen;
 [GlobalClass]
 public partial class BuffMoveResult : MoveResult
 {
-    public override bool apply(BattlerController controller, BattlerController target)
+    public override bool Apply(BattlerController controller, BattlerController target)
     {
-        if (!can_apply()) return false;
-        affected_targets.Add(target);
+        if (!CanApply())
+            return false;
+        affectedTargets.Add(target);
         // _at.stats[stat] += amount;
 
         return true;

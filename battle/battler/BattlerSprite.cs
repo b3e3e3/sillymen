@@ -11,52 +11,52 @@ public partial class BattlerSprite : Control
     public delegate void HitFrameEventHandler();
 
     [Export]
-    public Battler? battler { get; set; }
+    public Battler? Battler { get; set; }
 
     [ExportCategory("Sprites")]
     [Export]
-    public Texture2D? primary_sprite { get; set; }
+    public Texture2D? PrimarySprite { get; set; }
 
     [Export]
-    public Texture2D? secondary_sprite { get; set; }
+    public Texture2D? SecondarySprite { get; set; }
 
-    public TextureRect? texture;
-    public AnimationPlayer? animation_player;
+    public TextureRect? Texture { get; set; }
+    public AnimationPlayer? AnimationPlayer { get; set; }
 
     public BattlerSprite() { }
 
     public BattlerSprite(Battler battler)
     {
-        this.battler = battler;
+        Battler = battler;
     }
 
     public override void _Ready()
     {
-        primary_sprite = battler?.primary_sprite; // used to be ??=
-        secondary_sprite = battler?.secondary_sprite; // used to be ??=
+        PrimarySprite = Battler?.PrimarySprite; // used to be ??=
+        SecondarySprite = Battler?.SecondarySprite; // used to be ??=
 
-        animation_player ??= GetNode<AnimationPlayer>("AnimationPlayer");
+        AnimationPlayer ??= GetNode<AnimationPlayer>("AnimationPlayer");
         // if (texture == null)...
 
-        switch_primary_sprite();
+        SwitchPrimarySprite();
     }
 
-    public void trigger_hit_frame() => EmitSignal(SignalName.HitFrame);
+    public void TriggerHitFrame() => EmitSignal(SignalName.HitFrame);
 
-    public async Task play_animation(StringName anim)
+    public async Task PlayAnimation(StringName anim)
     {
-        if (animation_player == null)
+        if (AnimationPlayer == null)
             return;
-        if (!animation_player.HasAnimation(anim))
+        if (!AnimationPlayer.HasAnimation(anim))
         {
             GD.PushWarning($"No animation '{anim}' found.");
             return;
         }
 
-        animation_player.Play(anim);
-        await ToSignal(animation_player, AnimationMixer.SignalName.AnimationFinished);
-        animation_player.Play("RESET");
-        await ToSignal(animation_player, AnimationMixer.SignalName.AnimationFinished);
+        AnimationPlayer.Play(anim);
+        await ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
+        AnimationPlayer.Play("RESET");
+        await ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
 
         // # WIP: hit frames, but theyre currently unused. works tho
         // #var resolved := [false] # HACK: array so lambda captures
@@ -81,7 +81,7 @@ public partial class BattlerSprite : Control
         // #animation_player.animation_finished.disconnect(on_finished)
     }
 
-    public void switch_primary_sprite() => texture?.Texture = primary_sprite;
+    public void SwitchPrimarySprite() => Texture?.Texture = PrimarySprite;
 
-    public void switch_secondary_sprite() => texture?.Texture = secondary_sprite;
+    public void SwitchSecondarySprite() => Texture?.Texture = SecondarySprite;
 }

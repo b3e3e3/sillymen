@@ -7,14 +7,14 @@ namespace Sillymen;
 public abstract partial class StatusEffect : MoveResult // TOOD: move away from MoveResult. interface?
 {
     [Export]
-    public string name = "Status Condition";
+    public string Name { get; set; } = "Status Condition";
 
     [Export]
-    public int max_turns = 1;
-    protected int count = 0;
+    public int MaxTurns { get; set; } = 1;
+    public int count = 0;
 
-    public bool has_expired() => count >= max_turns;
+    public bool HasExpired() => count >= MaxTurns;
 
-    public override StringName get_animation() =>
-        _animation_name.ToString().Contains('/') ? _animation_name : $"status/{_animation_name}";
+    public override StringName GetAnimation() =>
+        AnimationName.ToString().Contains('/') ? AnimationName : $"status/{AnimationName}";
 }

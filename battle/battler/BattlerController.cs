@@ -8,31 +8,31 @@ namespace Sillymen;
 public partial class BattlerController : Node
 {
     [Export]
-    public Battler battler { get; set; }
-    public Move current_move { get; set; } = null;
-    public Array<StatusEffect> status_effects { get; set; } = [];
-    public BattleSimulator simulator { get; protected set; }
+    public Battler Battler { get; set; }
+    public Move CurrentMove { get; set; } = null;
+    public Array<StatusEffect> StatusEffects { get; set; } = [];
+    public BattleSimulator Simulator { get; protected set; }
 
     public BattlerController() { }
 
-    public BattlerController(Battler default_battler)
+    public BattlerController(Battler defaultBattler)
     {
-        battler = default_battler;
+        Battler = defaultBattler;
     }
 
     public override void _Ready()
     {
         GD.Print("Controller ready...");
-        simulator = GetParent<BattleSimulator>();
-        battler.initialize();
+        Simulator = GetParent<BattleSimulator>();
+        Battler.Initialize();
         GD.Print("Done!");
     }
 
-    public void remove_status_effect(StatusEffect e)
+    public void RemoveStatusEffect(StatusEffect e)
     {
-        status_effects.Remove(e);
+        StatusEffects.Remove(e);
     }
 
-    public virtual async Task<Move> choose_move( /*BattleState state*/
-    ) => battler.moves.PickRandom();
+    public virtual async Task<Move> ChooseMove( /*BattleState state*/
+    ) => Battler.Moves.PickRandom();
 }

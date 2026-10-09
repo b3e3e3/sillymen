@@ -6,13 +6,12 @@
 
 [sub_resource type="Resource" id="Resource_f8r87"]
 script = ExtResource("2_saxbo")
-power = 20
-_animation_name = &"damage"
-metadata/_custom_type_script = "uid://8yxdw5wylig2"
+Power = 20
+AnimationName = &"damage"
 
 [resource]
 script = ExtResource("1_np65w")
-name = "Ass Move"
-type = 3
-_animation_name = &"assmove"
-results = Array[ExtResource("2_ldhqn")]([SubResource("Resource_f8r87")])
+Name = "Ass Move"
+Type = 1
+AnimationName = &"assmove"
+Results = Array[ExtResource("2_ldhqn")]([SubResource("Resource_f8r87")])

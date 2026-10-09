@@ -10,27 +10,27 @@
 
 [sub_resource type="Resource" id="Resource_e1l7j"]
 script = ExtResource("1_0nhuy")
-base_value = 49.0
+BaseValue = 49.0
 metadata/_custom_type_script = "uid://did50bnewld6y"
 
 [sub_resource type="Resource" id="Resource_mln3h"]
 script = ExtResource("1_0nhuy")
-base_value = 65.0
+BaseValue = 65.0
 metadata/_custom_type_script = "uid://did50bnewld6y"
 
 [sub_resource type="Resource" id="Resource_0nhuy"]
 script = ExtResource("1_0nhuy")
-base_value = 45.0
+BaseValue = 45.0
 metadata/_custom_type_script = "uid://l8j1mj70vmcd"
 
 [resource]
 script = ExtResource("5_a8fy7")
-name = "Green Man"
-level = 13
-primary_type = 2
-primary_sprite = ExtResource("4_fe3ch")
-secondary_sprite = ExtResource("6_d3jkf")
-moves = Array[ExtResource("1_s67p4")]([ExtResource("2_f4d0h"), ExtResource("3_x0fgc")])
-attack = SubResource("Resource_e1l7j")
-defense = SubResource("Resource_mln3h")
-speed = SubResource("Resource_0nhuy")
+Name = "Green Man"
+Level = 13
+PrimaryType = 2
+PrimarySprite = ExtResource("4_fe3ch")
+SecondarySprite = ExtResource("6_d3jkf")
+Moves = Array[ExtResource("1_s67p4")]([ExtResource("2_f4d0h"), ExtResource("3_x0fgc")])
+Attack = SubResource("Resource_e1l7j")
+Defense = SubResource("Resource_mln3h")
+Speed = SubResource("Resource_0nhuy")

@@ -1,5 +1,4 @@
 #nullable enable
-using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -11,71 +10,77 @@ public partial class BattleState : Resource
 {
     [Signal]
     public delegate void TurnStartedEventHandler(Battler battler);
+
     [Signal]
     public delegate void TurnCompletedEventHandler();
-   
-    public enum Phase
+
+    public enum BattlePhase
     {
-        START,
-        CHOICE,
-        MOVE,
-        POST_MOVE,
-        END,
+        Start,
+        Choice,
+        Move,
+        PostMove,
+        End,
     }
 
-    [Export] public Battler? active_battler { get; set; }
-    [Export] public Array<Battler> battlers { get; set; } = [];
+    [Export]
+    public Battler? ActiveBattler { get; set; }
 
-    public Phase phase = Phase.START;
-    private Phase next_phase;
-    private int turn_index;
+    [Export]
+    public Array<Battler> Battlers { get; set; } = [];
+
+    public BattlePhase Phase { get; set; } = BattlePhase.Start;
+    private BattlePhase nextPhase;
+    private int turnIndex;
 
     public BattleState()
     {
-        next_phase = phase;
+        nextPhase = Phase;
     }
 
-    public Array<Battler> get_living_battlers() =>
-        [.. battlers.Where(b => !b.is_fainted())];
+    public Array<Battler> GetLivingBattlers() => [.. Battlers.Where(b => !b.IsFainted())];
 
-    public void next_battler()
+    public void NextBattler()
     {
-        if (battlers.Count == 0) return;
-        turn_index = (turn_index + 1) % battlers.Count;
+        if (Battlers.Count == 0)
+            return;
+        turnIndex = (turnIndex + 1) % Battlers.Count;
     }
 
-    public void process_state()
+    public void ProcessState()
     {
-        phase = next_phase;
+        Phase = nextPhase;
 
-        if (phase == Phase.CHOICE && get_living_battlers().Count <= 1)
+        if (Phase == BattlePhase.Choice && GetLivingBattlers().Count <= 1)
         {
-            phase = Phase.END;
-            next_phase = Phase.END;
+            Phase = BattlePhase.End;
+            nextPhase = BattlePhase.End;
         }
 
-        switch (phase)
+        switch (Phase)
         {
-            case Phase.START:
-                turn_index = 0;
-                next_phase = Phase.CHOICE;
+            case BattlePhase.Start:
+                turnIndex = 0;
+                nextPhase = BattlePhase.Choice;
                 break;
-            case Phase.CHOICE:
-                while (battlers[turn_index].is_fainted())
-                    next_battler();
-                active_battler = battlers[turn_index];
-                EmitSignal(SignalName.TurnStarted, active_battler);
-                next_phase = Phase.MOVE;
+            case BattlePhase.Choice:
+                while (Battlers[turnIndex].IsFainted())
+                    NextBattler();
+                ActiveBattler = Battlers[turnIndex];
+                EmitSignal(SignalName.TurnStarted, ActiveBattler);
+                nextPhase = BattlePhase.Move;
                 break;
-            case Phase.MOVE:
-                next_phase = Phase.POST_MOVE;
+            case BattlePhase.Move:
+                nextPhase = BattlePhase.PostMove;
                 break;
-            case Phase.POST_MOVE:
-                next_battler();
+            case BattlePhase.PostMove:
+                NextBattler();
                 EmitSignal(SignalName.TurnCompleted);
-                next_phase = Phase.CHOICE;
+                nextPhase = BattlePhase.Choice;
                 break;
-            case Phase.END:
+            case BattlePhase.End:
+                break;
+            default:
                 break;
         }
     }

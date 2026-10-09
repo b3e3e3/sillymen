@@ -6,12 +6,13 @@
 
 [sub_resource type="Resource" id="Resource_jah2n"]
 script = ExtResource("2_5d13s")
-_animation_name = &"boost"
-target_type = 0
+AnimationName = &"boost"
+TargetType = 0
 metadata/_custom_type_script = "uid://b1ehb1dbdvkkq"
 
 [resource]
 script = ExtResource("1_kfnw4")
-name = "Funny Blast"
-_animation_name = &"funnyblast"
-results = Array[ExtResource("2_mgpcu")]([SubResource("Resource_jah2n")])
+Name = "Funny Blast"
+Type = 3
+AnimationName = &"funnyblast"
+Results = Array[ExtResource("2_mgpcu")]([SubResource("Resource_jah2n")])

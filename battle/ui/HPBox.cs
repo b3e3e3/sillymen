@@ -8,10 +8,10 @@ public partial class HPBox : Control
     [Export]
     public BattlerController controller;
 
-    private RichTextLabel name_label;
-    private RichTextLabel level_number_label;
-    private RichTextLabel hp_number_label;
-    private ProgressBar hp_bar;
+    private RichTextLabel nameLabel;
+    private RichTextLabel levelNumberLabel;
+    private RichTextLabel hpNumberLabel;
+    private ProgressBar hpBar;
 
     public HPBox() { }
 
@@ -25,19 +25,19 @@ public partial class HPBox : Control
 
     public override void _Ready()
     {
-        name_label = GetNode<RichTextLabel>("%NameLabel");
-        level_number_label = GetNode<RichTextLabel>("%LevelNumberLabel");
-        hp_number_label = GetNode<RichTextLabel>("%HPNumberLabel");
-        hp_bar = GetNode<ProgressBar>("%HPBar");
+        nameLabel = GetNode<RichTextLabel>("%NameLabel");
+        levelNumberLabel = GetNode<RichTextLabel>("%LevelNumberLabel");
+        hpNumberLabel = GetNode<RichTextLabel>("%HPNumberLabel");
+        hpBar = GetNode<ProgressBar>("%HPBar");
 
-        update();
+        Update();
     }
 
-    public void update()
+    public void Update()
     {
-        name_label.Text = controller.battler.name;
-        level_number_label.Text = controller.battler.level.ToString();
-        hp_number_label.Text = controller.battler.current_hp.ToString();
-        hp_bar.Value = (float)controller.battler.current_hp / controller.battler.max_hp;
+        nameLabel.Text = controller.Battler.Name;
+        levelNumberLabel.Text = controller.Battler.Level.ToString();
+        hpNumberLabel.Text = controller.Battler.CurrentHp.ToString();
+        hpBar.Value = (float)controller.Battler.CurrentHp / controller.Battler.MaxHp;
     }
 }

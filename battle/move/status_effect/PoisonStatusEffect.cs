@@ -7,21 +7,24 @@ namespace Sillymen;
 [GlobalClass]
 public partial class PoisonStatusEffect : StatusEffect
 {
-    private const float DMG_MULT = 1.0f / 16;
+    private const float damageMult = 1.0f / 16;
 
-    private BattlerController? _target_controller;
+    private BattlerController? targetController;
 
-    private int get_damage(BattlerController target) => Math.Max(1, Mathf.RoundToInt(target.battler.max_hp * DMG_MULT));
+    private static int GetDamage(BattlerController target) =>
+        Math.Max(1, Mathf.RoundToInt(target.Battler.MaxHp * damageMult));
 
-    public override bool apply(BattlerController controller, BattlerController target)
+    public override bool Apply(BattlerController controller, BattlerController target)
     {
-        if (controller.battler.current_hp == 0) return false;
-        controller.battler.current_hp -= get_damage(controller);
-        
-        _target_controller = controller;
+        if (controller.Battler.CurrentHp == 0)
+            return false;
+        controller.Battler.CurrentHp -= GetDamage(controller);
+
+        targetController = controller;
         count++;
         return true;
     }
 
-    public override string? get_result_message() => $"{_target_controller?.battler.name} took damage from {name}!";
+    public override string? GetResultMessage() =>
+        $"{targetController?.Battler.Name} took damage from {Name}!";
 }

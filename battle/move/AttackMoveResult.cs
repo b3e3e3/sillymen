@@ -7,19 +7,19 @@ namespace Sillymen;
 [GlobalClass]
 public partial class AttackMoveResult : MoveResult
 {
-    private const float DEBUG_CRIT_MULT = 2.0f;
+    private const float debugCritMultiplier = 2.0f;
 
     [Export]
-    public int power;
+    public int Power { get; set; }
 
     [Export]
-    public int min_hits = 1;
+    public int MinHits { get; set; } = 1;
 
     [Export]
-    public int max_hits = 1;
+    public int MaxHits { get; set; } = 1;
 
-    private int _landed_hits = 0;
-    private bool _last_hit_crit = false;
+    private int landedHits = 0;
+    private bool lastHitCrit = false;
 
     private RandomNumberGenerator rng = new();
 
@@ -27,22 +27,22 @@ public partial class AttackMoveResult : MoveResult
     {
         int dmg;
 
-        var crit = _last_hit_crit ? DEBUG_CRIT_MULT : 1.0f;
-        var level = controller.battler.level;
-        var attack = controller.battler.attack.value;
-        var defense = target.battler.defense.value;
+        var crit = lastHitCrit ? debugCritMultiplier : 1.0f;
+        var level = controller.Battler.Level;
+        var attack = controller.Battler.Attack.Value;
+        var defense = target.Battler.Defense.Value;
         var level_divisor = 32.0f;
-        var effectiveness = controller.simulator.type_chart?.get_multipliers(
-            controller.current_move.type,
-            target.battler.get_types()
+        var effectiveness = controller.Simulator.TypeChart?.GetMultipliers(
+            controller.CurrentMove.Type,
+            target.Battler.GetTypes()
         );
 
         GD.Print(
-            $"level={level} crit={crit} power={power} atk={attack} def={defense} eff={effectiveness}"
+            $"level={level} crit={crit} power={Power} atk={attack} def={defense} eff={effectiveness}"
         );
 
         dmg = Mathf.RoundToInt(
-            ((2.0f * level * crit / 5.0f) + 2.0f) * power * (attack / defense) / level_divisor
+            ((2.0f * level * crit / 5.0f) + 2.0f) * Power * (attack / defense) / level_divisor
                 + 2.0f
         );
 
@@ -53,27 +53,26 @@ public partial class AttackMoveResult : MoveResult
         return dmg;
     }
 
-    public override int get_repeat_count() => rng.RandiRange(min_hits, max_hits);
+    public override int GetRepeatCount() => rng.RandiRange(MinHits, MaxHits);
 
     public virtual bool IsCritical(BattlerController controller) =>
-        rng.Randf() < controller.battler.GetCriticalChance();
+        rng.Randf() < controller.Battler.GetCriticalChance();
 
-    public override bool apply(BattlerController controller, BattlerController target)
+    public override bool Apply(BattlerController controller, BattlerController target)
     {
-        if (!can_apply())
+        if (!CanApply())
             return false;
-        _last_hit_crit = IsCritical(controller);
-        GD.Print($"is crit? {_last_hit_crit}");
+        lastHitCrit = IsCritical(controller);
+        GD.Print($"is crit? {lastHitCrit}");
 
-        target.battler.current_hp -= CalculateDamage(controller, target);
-        affected_targets.Add(target);
-        _landed_hits++;
+        target.Battler.CurrentHp -= CalculateDamage(controller, target);
+        affectedTargets.Add(target);
+        landedHits++;
 
         return true;
     }
 
-    public override string? get_hit_message() => _last_hit_crit ? "Critical hit!" : null;
+    public override string? GetHitMessage() => lastHitCrit ? "Critical hit!" : null;
 
-    public override string? get_result_message() =>
-        max_hits > 1 ? $"Hit {_landed_hits} time(s)!" : null;
+    public override string? GetResultMessage() => MaxHits > 1 ? $"Hit {landedHits} time(s)!" : null;
 }

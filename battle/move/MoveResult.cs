@@ -10,43 +10,43 @@ namespace Sillymen;
 [GlobalClass]
 public abstract partial class MoveResult : Resource
 {
-    public enum TargetType
+    public enum ValidTargetType
     {
-        SELF,
-        OTHER,
+        Self,
+        Other,
     }
 
     [Export]
-    protected StringName _animation_name = "";
+    public StringName AnimationName { get; set; } = "";
 
     [Export]
-    public float chance = 1.0f;
+    public float Chance { get; set; } = 1.0f;
 
     [Export]
-    public TargetType target_type = TargetType.OTHER;
+    public ValidTargetType TargetType { get; set; } = ValidTargetType.Other;
 
-    protected List<BattlerController> affected_targets = [];
+    protected List<BattlerController> affectedTargets = [];
 
-    public virtual bool has_animation() => _animation_name != (StringName)"";
+    public virtual bool HasAnimation() => AnimationName != (StringName)"";
 
-    public virtual StringName get_animation() =>
-        _animation_name.ToString().Contains('/') ? _animation_name : $"status/{_animation_name}";
+    public virtual StringName GetAnimation() =>
+        AnimationName.ToString().Contains('/') ? AnimationName : $"status/{AnimationName}";
 
-    public virtual List<Battler> get_valid_targets(Battler user, Array<Battler> battlers) =>
-        target_type switch
+    public virtual List<Battler> GetValidTargets(Battler user, Array<Battler> battlers) =>
+        TargetType switch
         {
-            TargetType.SELF => [.. from b in battlers where b == user select b],
-            TargetType.OTHER => [.. from b in battlers where b != user select b],
+            ValidTargetType.Self => [.. from b in battlers where b == user select b],
+            ValidTargetType.Other => [.. from b in battlers where b != user select b],
             _ => [],
         };
 
-    public abstract bool apply(BattlerController controller, BattlerController target);
+    public abstract bool Apply(BattlerController controller, BattlerController target);
 
-    public virtual bool can_apply() => new Random().NextDouble() <= chance;
+    public virtual bool CanApply() => new Random().NextDouble() <= Chance;
 
-    public virtual string? get_result_message() => null;
+    public virtual string? GetResultMessage() => null;
 
-    public virtual string? get_hit_message() => null;
+    public virtual string? GetHitMessage() => null;
 
-    public virtual int get_repeat_count() => 1;
+    public virtual int GetRepeatCount() => 1;
 }

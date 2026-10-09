@@ -7,37 +7,38 @@ namespace Sillymen;
 public partial class Stat : Resource
 {
     [Export]
-    public float base_value;
+    public float BaseValue { get; set; }
 
-    public float min_value { get; private set; } = 0.0f;
+    public float MinValue { get; private set; } = 0.0f;
 
-    public float max_value { get; private set; } = 255.0f;
-
-    [Export]
-    public int min_stage { get; private set; } = -4;
+    public float MaxValue { get; private set; } = 255.0f;
 
     [Export]
-    public int max_stage { get; private set; } = 4;
-    public int stage
+    public int MinStage { get; private set; } = -4;
+
+    [Export]
+    public int MaxStage { get; private set; } = 4;
+    public int Stage
     {
-        get => _stage;
+        get;
         set
         {
-            _stage = Math.Clamp(value, min_stage, max_stage);
-            _dirty = true;
+            field = Math.Clamp(value, MinStage, MaxStage);
+            dirty = true;
         }
-    }
-    public float value
+    } = 0;
+    public float Value
     {
         get
         {
-            if (_dirty)
+            if (dirty)
             {
-                _cached_value = GetValueAtStage(0);
-                _dirty = false;
+                field = GetValueAtStage(0);
+                dirty = false;
             }
-            return _cached_value;
+            return field;
         }
+        private set;
     }
 
     [ExportCategory("IVs/EVs")]
@@ -46,16 +47,13 @@ public partial class Stat : Resource
 
     [Export]
     public int effort = 0;
-
-    private int _stage = 0;
-    private float _cached_value;
-    private bool _dirty = true;
+    private bool dirty = true;
 
     public Stat() { }
 
-    public Stat(float? stat_value)
+    public Stat(float? statValue)
     {
-        base_value = stat_value ?? base_value;
+        BaseValue = statValue ?? BaseValue;
     }
 
     // private float _calculate(int atStage)
@@ -68,10 +66,10 @@ public partial class Stat : Resource
     // }
 
     // Pokemon-style: +1 = 3/2, +2 = 4/2, -1 = 2/3, ...
-    public float get_stage_multiplier(int atStage) =>
+    public static float GetStageMultiplier(int atStage) =>
         (float)(2.0 + Math.Max(atStage, 0)) / (2.0f + Math.Max(-atStage, 0));
 
-    public float get_stage_multiplier() => get_stage_multiplier(stage);
+    public float GetStageMultiplier() => GetStageMultiplier(Stage);
 
     public float GetValueAtStage(int extraStages)
     {
@@ -80,23 +78,23 @@ public partial class Stat : Resource
 
         // TODO: foreach (m in modifiers)...
 
-        var s = Math.Clamp(stage + extraStages, min_stage, max_stage);
-        var staged = (base_value + flat) * get_stage_multiplier(s) * mult;
-        GD.Print($"Value at stage: {Math.Clamp(staged, min_value, max_value)}");
-        return Math.Clamp(staged, min_value, max_value);
+        var s = Math.Clamp(Stage + extraStages, MinStage, MaxStage);
+        var staged = (BaseValue + flat) * GetStageMultiplier(s) * mult;
+        GD.Print($"Value at stage: {Math.Clamp(staged, MinValue, MaxValue)}");
+        return Math.Clamp(staged, MinValue, MaxValue);
     }
 
-    public void add_modifier( /**/
+    public void AddModifier( /**/
     )
     {
-        _dirty = true;
+        dirty = true;
         throw new NotImplementedException();
     }
 
-    public void remove_modifier( /**/
+    public void RemoveModifier( /**/
     )
     {
-        _dirty = true;
+        dirty = true;
         throw new NotImplementedException();
     }
 }

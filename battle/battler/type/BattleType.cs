@@ -6,7 +6,7 @@ namespace Sillymen;
 [GlobalClass]
 public partial class BattleType : Resource
 {
-    public enum Type
+    public enum TypeKind
     {
         NORMAL,
         CRAZY,
@@ -14,6 +14,10 @@ public partial class BattleType : Resource
         SILLY,
         NONE,
     }
-    [Export] public Type type;
-    [Export] public Dictionary<Type, float> effectiveness;
+
+    [Export]
+    public TypeKind Type { get; set; }
+
+    [Export]
+    public Dictionary<TypeKind, float> Effectiveness { get; set; } = [];
 }

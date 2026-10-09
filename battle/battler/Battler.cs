@@ -10,67 +10,65 @@ public partial class Battler : Resource
 {
     [ExportCategory("General")]
     [Export]
-    public string name;
+    public string Name { get; set; }
 
     [Export]
-    public int level = 1;
+    public int Level { get; set; } = 1;
 
     [Export]
-    public int max_hp = 100;
+    public int MaxHp { get; set; } = 100;
 
     [ExportCategory("Type")]
     [Export]
-    public BattleType.Type primary_type = BattleType.Type.NORMAL;
+    public BattleType.TypeKind PrimaryType { get; set; } = BattleType.TypeKind.NORMAL;
 
     [Export]
-    public BattleType.Type secondary_type = BattleType.Type.NONE;
+    public BattleType.TypeKind SecondaryType { get; set; } = BattleType.TypeKind.NONE;
 
     [ExportCategory("Sprites")]
     [Export]
-    public Texture2D primary_sprite { get; set; }
+    public Texture2D PrimarySprite { get; set; }
 
     [Export]
-    public Texture2D secondary_sprite { get; set; }
+    public Texture2D SecondarySprite { get; set; }
 
     [ExportCategory("Moves")]
     [Export]
-    public Array<Move> moves { get; set; } = [];
+    public Array<Move> Moves { get; set; } = [];
 
     [ExportCategory("Stats")]
     [Export]
-    public Stat attack { get; set; }
+    public Stat Attack { get; set; }
 
     [Export]
-    public Stat defense { get; set; }
+    public Stat Defense { get; set; }
 
     [Export]
-    public Stat speed { get; set; }
+    public Stat Speed { get; set; }
 
-    public Stat critical_rate { get; set; }
+    public Stat CriticalRate { get; set; }
 
-    private int _current_hp = -1;
-
-    public int current_hp
+    public int CurrentHp
     {
-        get => _current_hp;
-        set { _current_hp = Math.Clamp(value, 0, max_hp); }
+        get;
+        set => field = Math.Clamp(value, 0, MaxHp);
     }
 
-    public void initialize()
+    public void Initialize()
     {
-        _current_hp = max_hp;
+        CurrentHp = MaxHp;
 
-        attack.stage = 0;
-        defense.stage = 0;
-        speed.stage = 0;
+        Attack.Stage = 0;
+        Defense.Stage = 0;
+        Speed.Stage = 0;
 
-        critical_rate = new(speed.base_value / 2);
-        GD.Print($"Initialized {name}!");
+        CriticalRate = new(Speed.BaseValue / 2);
+        GD.Print($"Initialized {Name}!");
     }
 
-    public bool is_fainted() => current_hp == 0;
+    public bool IsFainted() => CurrentHp == 0;
 
-    public float GetCriticalChance() => critical_rate.value / 256;
+    public float GetCriticalChance() => CriticalRate.Value / 256;
 
-    public List<BattleType.Type> get_types() => [primary_type, secondary_type];
+    public List<BattleType.TypeKind> GetTypes() => [PrimaryType, SecondaryType];
 }

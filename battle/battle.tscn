@@ -122,9 +122,9 @@ _data = {
 &"intro": SubResource("Animation_tkkqt")
 }
 
-[sub_resource type="Resource" id="Resource_qybyd"]
+[sub_resource type="Resource" id="Resource_vlrs1"]
 script = ExtResource("2_hvjow")
-battlers = null
+Battlers = null
 metadata/_custom_type_script = "uid://cvaq1obeq4oye"
 
 [node name="Battle" type="Control"]
@@ -140,25 +140,25 @@ libraries = {
 &"": SubResource("AnimationLibrary_dxsh4")
 }
 
-[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "battle_box", "animation_player", "hp_boxes", "sprites")]
+[node name="BattleSimulator" type="Node" parent="." node_paths=PackedStringArray("controllers", "BattleBox", "AnimationPlayer", "HpBoxes", "Sprites")]
 script = ExtResource("1_iorop")
 autorun = true
 controllers = [NodePath("PlayerController"), NodePath("BattlerController")]
-battle = SubResource("Resource_qybyd")
-type_chart = ExtResource("3_qybyd")
-battle_box = NodePath("../UIContainer/UI/BattleBox")
-animation_player = NodePath("../AnimationPlayer")
-hp_boxes = [NodePath("../UIContainer/UI/HPBoxLeft"), NodePath("../UIContainer/UI/HPBoxRight")]
-sprites = [NodePath("../PlayerBattlerContainer/PlayerBattlerSprite"), NodePath("../OpponentBattlerContainer/OpponentBattlerSprite")]
+Battle = SubResource("Resource_vlrs1")
+TypeChart = ExtResource("3_qybyd")
+BattleBox = NodePath("../UIContainer/UI/BattleBox")
+AnimationPlayer = NodePath("../AnimationPlayer")
+HpBoxes = [NodePath("../UIContainer/UI/HPBoxLeft"), NodePath("../UIContainer/UI/HPBoxRight")]
+Sprites = [NodePath("../PlayerBattlerContainer/PlayerBattlerSprite"), NodePath("../OpponentBattlerContainer/OpponentBattlerSprite")]
 metadata/_custom_type_script = "uid://u616j31r0fvo"
 
 [node name="PlayerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("4_j5u3w")
-battler = ExtResource("5_a56dj")
+Battler = ExtResource("5_a56dj")
 
 [node name="BattlerController" type="Node" parent="BattleSimulator"]
 script = ExtResource("7_tkkqt")
-battler = ExtResource("7_qybyd")
+Battler = ExtResource("7_qybyd")
 
 [node name="PlayerBattlerContainer" type="Control" parent="."]
 layout_mode = 1
@@ -200,7 +200,7 @@ theme = ExtResource("12_wtxou")
 [node name="UI" type="Control" parent="UIContainer"]
 layout_mode = 2
 
-[node name="BattleBox" type="Control" parent="UIContainer/UI" node_paths=PackedStringArray("simulator", "dialog_container", "dialog_label", "choice_container", "moves_container")]
+[node name="BattleBox" type="Control" parent="UIContainer/UI" node_paths=PackedStringArray("Simulator", "DialogContainer", "DialogLabel", "ChoiceContainer", "MovesContainer")]
 layout_mode = 1
 anchor_top = 0.6419753
 anchor_right = 1.0
@@ -209,11 +209,11 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("12_wtxou")
 script = ExtResource("13_8j1rm")
-simulator = NodePath("../../../BattleSimulator")
-dialog_container = NodePath("Panel/HBoxContainer/DialogContainer")
-dialog_label = NodePath("Panel/HBoxContainer/DialogContainer/DialogLabel")
-choice_container = NodePath("Panel/HBoxContainer/ChoiceContainer")
-moves_container = NodePath("Panel/HBoxContainer/MovesContainer")
+Simulator = NodePath("../../../BattleSimulator")
+DialogContainer = NodePath("Panel/HBoxContainer/DialogContainer")
+DialogLabel = NodePath("Panel/HBoxContainer/DialogContainer/DialogLabel")
+ChoiceContainer = NodePath("Panel/HBoxContainer/ChoiceContainer")
+MovesContainer = NodePath("Panel/HBoxContainer/MovesContainer")
 
 [node name="Panel" type="Panel" parent="UIContainer/UI/BattleBox"]
 layout_mode = 1
@@ -281,6 +281,8 @@ anchors_preset = 0
 anchor_top = 0.48538962
 anchor_right = 0.0
 anchor_bottom = 0.6165624
+offset_right = 315.0
+offset_bottom = 0.19754028
 grow_vertical = 1
 controller = NodePath("../../../BattleSimulator/PlayerController")
 
@@ -291,6 +293,8 @@ anchor_left = 0.71875
 anchor_top = -0.008116883
 anchor_right = 0.99999934
 anchor_bottom = 0.12305594
+offset_right = 0.0007324219
+offset_bottom = 0.19754028
 grow_vertical = 1
 controller = NodePath("../../../BattleSimulator/BattlerController")
 

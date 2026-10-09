@@ -9,38 +9,41 @@ namespace Sillymen;
 [GlobalClass]
 public partial class TypeChart : Resource
 {
-    [Export] public Array<BattleType> types = [];
-
+    [Export]
+    public Array<BattleType> Types { get; set; } = [];
 
     public TypeChart()
     {
-        foreach (var type in Enum.GetValues<BattleType.Type>())
+        foreach (var type in Enum.GetValues<BattleType.TypeKind>())
         {
-            if (types.Any(bt => bt.type == type)) continue;
-            types.Add(new BattleType { type = type });
+            if (Types.Any(bt => bt.Type == type))
+                continue;
+            Types.Add(new BattleType { Type = type });
         }
     }
 
-    public float get_multiplier(BattleType.Type attacking, BattleType.Type defending)
+    public float GetMultiplier(BattleType.TypeKind attacking, BattleType.TypeKind defending)
     {
-        foreach (var bt in types)
+        foreach (var bt in Types)
         {
-            if (bt.type != attacking) continue;
-            return bt.effectiveness.GetValueOrDefault(defending, 1.0f);
+            if (bt.Type != attacking)
+                continue;
+            return bt.Effectiveness.GetValueOrDefault(defending, 1.0f);
         }
         return 1.0f;
     }
 
-    public float get_multipliers(BattleType.Type attacking, List<BattleType.Type> defenders)
+    public float GetMultipliers(BattleType.TypeKind attacking, List<BattleType.TypeKind> defenders)
     {
         var total_mult = 1.0f;
         foreach (var defending in defenders)
         {
-            if (defending == BattleType.Type.NONE) continue;
+            if (defending == BattleType.TypeKind.NONE)
+                continue;
 
-            var mult = get_multiplier(attacking, defending);
+            var mult = GetMultiplier(attacking, defending);
             total_mult *= mult;
-            
+
             GD.Print($"{Enum.GetName(attacking)} eff against {Enum.GetName(defending)}? {mult}");
         }
         return total_mult;
