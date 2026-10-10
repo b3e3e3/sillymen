@@ -169,6 +169,22 @@ public partial class BattleSimulator : Node
             case BattleState.BattlePhase.PostMove:
                 if (controller is null)
                     break;
+
+                // check for fainting
+                foreach (var b in Battle.Battlers)
+                {
+                    if (b.CurrentHp > 0)
+                        continue;
+
+                    var s = GetSpriteFor(b);
+                    if (s is null)
+                        continue;
+
+                    // this bitch dead
+                    // TODO: magic line
+                    await s.PlayAnimation("actions/faint", false);
+                }
+
                 foreach (var e in controller.StatusEffects.Duplicate())
                 {
                     await PresentAction(new PlannedAction(e, controller, controller)); // TODO: what??

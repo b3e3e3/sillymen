@@ -30,7 +30,7 @@ public partial class BattlerSprite : Control
 
     public void TriggerHitFrame() => EmitSignal(SignalName.HitFrame);
 
-    public async Task PlayAnimation(StringName anim)
+    public async Task PlayAnimation(StringName anim, bool reset = true)
     {
         if (AnimationPlayer is null)
             return;
@@ -42,10 +42,10 @@ public partial class BattlerSprite : Control
 
         AnimationPlayer.Play(anim);
         await ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
-        AnimationPlayer.Play("RESET");
-        await ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
 
-        GD.Print("Done playing anim 2");
+        if (reset)
+            await ResetAnimation();
+
         // # WIP: hit frames, but theyre currently unused. works tho
         // #var resolved := [false] # HACK: array so lambda captures
         // #var on_hit := func():
@@ -67,6 +67,12 @@ public partial class BattlerSprite : Control
         // #
         // #hit_frame.disconnect(on_hit)
         // #animation_player.animation_finished.disconnect(on_finished)
+    }
+
+    private async Task ResetAnimation()
+    {
+        AnimationPlayer.Play("RESET");
+        await ToSignal(AnimationPlayer, AnimationMixer.SignalName.AnimationFinished);
     }
 
     public void SwitchPrimarySprite() => Texture?.Texture = PrimarySprite;

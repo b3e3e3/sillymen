@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_f8r87"]
 script = ExtResource("2_saxbo")
-Power = 20
+Power = 30
 AnimationName = &"damage"
 
 [resource]

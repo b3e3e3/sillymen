@@ -27,6 +27,7 @@ metadata/_custom_type_script = "uid://l8j1mj70vmcd"
 script = ExtResource("5_a8fy7")
 Name = "Green Man"
 Level = 13
+MaxHp = 50
 PrimaryType = 2
 PrimarySprite = ExtResource("4_fe3ch")
 SecondarySprite = ExtResource("6_d3jkf")
