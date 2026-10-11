@@ -1,7 +1,6 @@
 #nullable enable
 using System.Linq;
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -27,7 +26,7 @@ public partial class BattleState : Resource
     public Battler? ActiveBattler { get; set; }
 
     [Export]
-    public Array<Battler> Battlers { get; set; } = [];
+    public Godot.Collections.Array<Battler> Battlers { get; set; } = [];
 
     public BattlePhase Phase { get; set; } = BattlePhase.Start;
     private BattlePhase nextPhase;
@@ -38,7 +37,7 @@ public partial class BattleState : Resource
         nextPhase = Phase;
     }
 
-    public Array<Battler> GetLivingBattlers() => [.. Battlers.Where(b => !b.IsFainted())];
+    public Godot.Collections.Array<Battler> GetLivingBattlers() => [.. Battlers.Where(b => !b.IsFainted())];
 
     public void NextBattler()
     {

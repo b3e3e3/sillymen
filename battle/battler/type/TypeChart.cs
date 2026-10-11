@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -10,7 +9,7 @@ namespace Sillymen;
 public partial class TypeChart : Resource
 {
     [Export]
-    public Array<BattleType> Types { get; set; } = [];
+    public Godot.Collections.Array<BattleType> Types { get; set; } = [];
 
     public TypeChart()
     {
@@ -44,7 +43,7 @@ public partial class TypeChart : Resource
             var mult = GetMultiplier(attacking, defending);
             total_mult *= mult;
 
-            GD.Print($"{Enum.GetName(attacking)} eff against {Enum.GetName(defending)}? {mult}");
+            GD.Print($"{attacking} eff against {defending}? {mult}");
         }
         return total_mult;
     }

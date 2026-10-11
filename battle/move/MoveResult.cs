@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -32,7 +31,7 @@ public abstract partial class MoveResult : Resource
     public virtual StringName GetAnimation() =>
         AnimationName.ToString().Contains('/') ? AnimationName : $"status/{AnimationName}";
 
-    public virtual List<Battler> GetValidTargets(Battler user, Array<Battler> battlers) =>
+    public virtual List<Battler> GetValidTargets(Battler user, Godot.Collections.Array<Battler> battlers) =>
         TargetType switch
         {
             ValidTargetType.Self => [.. from b in battlers where b == user select b],

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Godot;
-using Godot.Collections;
 
 namespace Sillymen;
 
@@ -34,7 +33,7 @@ public partial class Battler : Resource
 
     [ExportCategory("Moves")]
     [Export]
-    public Array<Move> Moves { get; set; } = [];
+    public Godot.Collections.Array<Move> Moves { get; set; } = [];
 
     [ExportCategory("Stats")]
     [Export]
